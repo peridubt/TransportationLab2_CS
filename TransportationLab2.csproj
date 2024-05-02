@@ -8,4 +8,14 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Cargo\Factory\" />
+    <Folder Include="Cargo\Unit\" />
+    <Folder Include="City\" />
+    <Folder Include="Client\" />
+    <Folder Include="Resources\" />
+    <Folder Include="Road\" />
+    <Folder Include="Vehicle\" />
+  </ItemGroup>
+
 </Project>
