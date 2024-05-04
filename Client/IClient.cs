@@ -8,6 +8,6 @@ public interface IClient
     string Surname { get; }
     City.City City { get; }
     ICargo Order { get; }
-    void AwaitOrder();
+    void GetOrder();
    
 }

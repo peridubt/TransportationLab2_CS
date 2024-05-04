@@ -8,7 +8,7 @@ public class Client : IClient
     public string Surname { get; }
     public City.City City { get; }
     public ICargo Order { get; }
-    public void AwaitOrder()
+    public void GetOrder()
     {
         throw new NotImplementedException();
     }
