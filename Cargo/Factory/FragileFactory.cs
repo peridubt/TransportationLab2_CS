@@ -2,11 +2,11 @@
 
 namespace TransportationLab2.Cargo.Factory;
 
-public class FragileFactory(string name, int cost, int weight) : ICargoFactory
+public class FragileFactory(string name, int cost, int weight, int id) : ICargoFactory
 {
     public ICargo CreateCargo()
     {
-        Fragile dangerousCargo = new Fragile(name, cost, weight);
+        Fragile dangerousCargo = new Fragile(name, cost, weight, id);
         return dangerousCargo;
     }
 }

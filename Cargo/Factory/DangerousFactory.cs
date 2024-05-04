@@ -2,11 +2,11 @@
 
 namespace TransportationLab2.Cargo.Factory;
 
-public class DangerousFactory(string name, int cost, int weight) : ICargoFactory
+public class DangerousFactory(string name, int cost, int weight, int id) : ICargoFactory
 {
     public ICargo CreateCargo()
     {
-        Dangerous dangerousCargo = new Dangerous(name, cost, weight);
+        Dangerous dangerousCargo = new Dangerous(name, cost, weight, id);
         return dangerousCargo;
     }
 }

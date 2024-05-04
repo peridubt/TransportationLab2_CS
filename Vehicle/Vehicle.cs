@@ -10,12 +10,31 @@ public class Vehicle(string carBrand,
     City.City targetCity)
     : IVehicle
 {
-    private event Action<IClient>? _сlientServed;
+    private event Action<IClient>? _notifyClient; // Event, на который подписывается клиент.
+    // При срабатывании данного события клиент получит заказ, а после чего
+    // отпишется от уведомлений по заказу.
+
+    private Thread _thread; // Поток, который реализует доставку с помощью нескольких грузовиков
     
     public string CarBrand { get; } = carBrand;
     public int LoadCapacity { get; } = loadCapacity;
     public int Id { get; } = id;
-    public List<ICargo> CargoList { get; set; }
+    public List<ICargo>? CargoList { get; set; }
     public City.City StartCity { get; set; } = startCity;
     public City.City TargetCity { get; set; } = targetCity;
+
+    public void ReserveQueue(IClient client)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Deliver(int id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void DelFromQueue(IClient client)
+    {
+        throw new NotImplementedException();
+    }
 }

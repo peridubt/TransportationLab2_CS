@@ -1,6 +1,15 @@
-﻿namespace TransportationLab2.Client;
+﻿using TransportationLab2.Cargo.Unit;
 
-public class Client
+namespace TransportationLab2.Client;
+
+public class Client : IClient
 {
-    
+    public string Name { get; }
+    public string Surname { get; }
+    public City.City City { get; }
+    public ICargo Order { get; }
+    public void AwaitOrder()
+    {
+        throw new NotImplementedException();
+    }
 }
