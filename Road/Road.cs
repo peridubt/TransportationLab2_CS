@@ -1,8 +1,7 @@
 ﻿namespace TransportationLab2.Road;
 
-public class Road(City.City cityB, City.City cityA, int length)
+public class Road(City.City destinationCity, int length)
 {
-    public City.City CityA => cityA;
-    public City.City CityB => cityB;
+    public City.City DestinationCity => destinationCity;
     public int Length => length;
 }

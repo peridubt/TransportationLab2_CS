@@ -17,12 +17,13 @@ public class Vehicle(
     private Thread? _thread; // Поток, который реализует доставку с помощью нескольких грузовиков
     private object _lock = new object();
     private Timer _timer = new Timer();
-    
-    public bool WaitForOrder { get; set; }
+
+    private bool _waitForOrder = true;
     private Queue<IClient>? Clients { get; }
     public string CarBrand { get; } = carBrand;
     public int Id { get; } = id;
     public City.City TargetCity { get; set; } = targetCity;
+    public Road.Road? CurrentRoute { get; set; }
 
     private event Action NotifyClient
     {
@@ -30,27 +31,13 @@ public class Vehicle(
         remove { _notifyClient -= value; }
     }
 
-    public void GetRandomOrder(List<IClient> clientsOrderList)
-    {
-        var index = new Random().Next(0, clientsOrderList.Count);
-        Clients?.Enqueue(clientsOrderList[index]);
-        clientsOrderList.RemoveAt(index);
-    }
-
-    public void Start()
-    {
-        _thread = new Thread(VehicleLogic);
-        _thread.Start();
-    }
-
     private void DriveToClient()
     {
-        
     }
-    
+
     private void CheckForOrders(List<IClient> clientsOrderList)
     {
-        if (WaitForOrder)
+        if (_waitForOrder)
             return;
         try
         {
@@ -66,10 +53,40 @@ public class Vehicle(
 
     private void VehicleLogic()
     {
-        
+        /*// Установка стартовых координат
+        SetStartCoord();
+
+        // Отображение
+        Draw();*/
+        Thread.Sleep(CurrentRoute.Length * 20);
     }
 
-    public void ReserveQueue(IClient client)
+    public void GetNewRoute(List<Road.Road> roads)
+    {
+        foreach (var road in roads)
+        {
+            if (road.DestinationCity == TargetCity)
+            {
+                CurrentRoute = road;
+                break;
+            }
+        }
+    }
+
+    public void GetRandomOrder(List<IClient> clientsOrderList)
+    {
+        var index = new Random().Next(0, clientsOrderList.Count);
+        Clients?.Enqueue(clientsOrderList[index]);
+        clientsOrderList.RemoveAt(index);
+    }
+
+    public void Start()
+    {
+        _thread = new Thread(VehicleLogic);
+        _thread.Start();
+    }
+
+    public void AddOrder(IClient client)
     {
         lock (_lock)
         {
@@ -83,7 +100,7 @@ public class Vehicle(
         _notifyClient?.Invoke();
     }
 
-    public void DelFromQueue()
+    public void CompleteOrder()
     {
         lock (_lock)
         {
