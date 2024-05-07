@@ -51,8 +51,8 @@
             // 
             // addClientButton
             // 
-            addClientButton.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            addClientButton.Location = new Point(12, 547);
+            addClientButton.Font = new Font("Segoe UI", 13.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            addClientButton.Location = new Point(1, 547);
             addClientButton.Name = "addClientButton";
             addClientButton.Size = new Size(215, 66);
             addClientButton.TabIndex = 1;
@@ -62,8 +62,8 @@
             // 
             // addVehicleButton
             // 
-            addVehicleButton.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            addVehicleButton.Location = new Point(12, 12);
+            addVehicleButton.Font = new Font("Segoe UI", 13.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            addVehicleButton.Location = new Point(1, 12);
             addVehicleButton.Name = "addVehicleButton";
             addVehicleButton.Size = new Size(215, 66);
             addVehicleButton.TabIndex = 2;
@@ -74,42 +74,42 @@
             // vehiclesLabel
             // 
             vehiclesLabel.AutoSize = true;
-            vehiclesLabel.Font = new Font("Segoe UI", 21.75F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            vehiclesLabel.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
             vehiclesLabel.Location = new Point(1, 81);
             vehiclesLabel.Name = "vehiclesLabel";
-            vehiclesLabel.Size = new Size(245, 40);
+            vehiclesLabel.Size = new Size(239, 38);
             vehiclesLabel.TabIndex = 4;
             vehiclesLabel.Text = "Available vehicles:";
             // 
             // clientsLabel
             // 
             clientsLabel.AutoSize = true;
-            clientsLabel.Font = new Font("Segoe UI", 21.75F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            clientsLabel.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
             clientsLabel.Location = new Point(1, 616);
             clientsLabel.Name = "clientsLabel";
-            clientsLabel.Size = new Size(226, 40);
+            clientsLabel.Size = new Size(220, 38);
             clientsLabel.TabIndex = 5;
             clientsLabel.Text = "Available clients:";
             // 
             // vehiclesListView
             // 
-            vehiclesListView.Location = new Point(12, 124);
+            vehiclesListView.Location = new Point(1, 134);
             vehiclesListView.Name = "vehiclesListView";
-            vehiclesListView.Size = new Size(215, 240);
+            vehiclesListView.Size = new Size(215, 230);
             vehiclesListView.TabIndex = 6;
             vehiclesListView.UseCompatibleStateImageBehavior = false;
             // 
             // clientsListView
             // 
-            clientsListView.Location = new Point(12, 659);
+            clientsListView.Location = new Point(1, 669);
             clientsListView.Name = "clientsListView";
-            clientsListView.Size = new Size(215, 240);
+            clientsListView.Size = new Size(215, 230);
             clientsListView.TabIndex = 7;
             clientsListView.UseCompatibleStateImageBehavior = false;
             // 
             // MainForm
             // 
-            AutoScaleDimensions = new SizeF(9F, 21F);
+            AutoScaleDimensions = new SizeF(11F, 28F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1184, 911);
             Controls.Add(clientsListView);
