@@ -6,8 +6,7 @@ namespace TransportationLab2.Vehicle;
 
 public class Vehicle(
     string carBrand,
-    int id,
-    City.City targetCity)
+    int id)
     : IVehicle
 {
     private event Action? _notifyClient; // Event, на который подписывается клиент.
@@ -22,8 +21,7 @@ public class Vehicle(
     private Queue<IClient>? Clients { get; }
     public string CarBrand { get; } = carBrand;
     public int Id { get; } = id;
-    public City.City TargetCity { get; set; } = targetCity;
-    public Road.Road? CurrentRoute { get; set; }
+    public City.City TargetCity { get; set; }
 
     private event Action NotifyClient
     {
@@ -58,19 +56,7 @@ public class Vehicle(
 
         // Отображение
         Draw();*/
-        Thread.Sleep(CurrentRoute.Length * 20);
-    }
-
-    public void GetNewRoute(List<Road.Road> roads)
-    {
-        foreach (var road in roads)
-        {
-            if (road.DestinationCity == TargetCity)
-            {
-                CurrentRoute = road;
-                break;
-            }
-        }
+        Thread.Sleep(20);
     }
 
     public void GetRandomOrder(List<IClient> clientsOrderList)

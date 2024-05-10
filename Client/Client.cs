@@ -5,8 +5,7 @@ namespace TransportationLab2.Client;
 public class Client(
     string name,
     string surname,
-    City.City city,
-    ICargo? order)
+    City.City city)
     : IClient
 {
     private ClientState _state = ClientState.CreatedOrder;
@@ -14,7 +13,7 @@ public class Client(
     public string Name { get; } = name;
     public string Surname { get; } = surname;
     public City.City City { get; } = city;
-    public ICargo? Order { get; set; } = order;
+    public ICargo? Order { get; set; }
 
     public void GetOrder()
     {
