@@ -1,8 +1,8 @@
 ﻿namespace TransportationLab2.Client;
 
-public enum ClientState
+public enum ClientState // состояния для клиента
 {
-    CreatedOrder,
-    WaitingOrder,
-    ReceivedOrder
+    WaitingForOrder, // ждёт заказ
+    RecievingOrder, // полуает заказ
+    Inactive // не активен (до нового заказа)
 }

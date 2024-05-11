@@ -8,5 +8,5 @@ public interface IClient
     string Surname { get; }
     City.City City { get; }
     ICargo? Order { get; set; }
-    void GetOrder();
+    ClientState State { get; set; }
 }

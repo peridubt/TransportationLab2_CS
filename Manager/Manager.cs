@@ -14,7 +14,16 @@ public class Manager
     private Thread? _mainThread;
     private object _lock = new();
     private object _moveLock = new();
+    private event Action? _notifyClient; // Event, на который подписывается клиент.
+    // При срабатывании данного события клиент получит заказ, а после чего
+    // отпишется от уведомлений по заказу.
 
+    private event Action NotifyClient
+    {
+        add { _notifyClient += value; }
+        remove { _notifyClient -= value; }
+    }
+    
     private void CreateRoads()
     {
         _roads = new Dictionary<City.City, int>
