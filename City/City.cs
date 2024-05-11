@@ -1,10 +1,15 @@
 ﻿namespace TransportationLab2.City;
 
-public enum City // Города, в которые доставляются грузы
+public class City
 {
-    Vlg, // Волгоград
-    Msk, // Москва
-    Spb, // Санкт-Петербург
-    Kzn, // Казань
-    Smr // Самара
+    public string Name { get; }
+    public int RoadLength { get; }
+    public Point Coordinates { get; }
+    
+    public City(string name, int roadLength, Point coordinates = new())
+    {
+        Name = name;
+        RoadLength = roadLength;
+        Coordinates = coordinates;
+    }
 }

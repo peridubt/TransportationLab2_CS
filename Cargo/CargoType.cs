@@ -3,7 +3,7 @@
 public enum CargoType // перечислитель - типы грузов
 {
     Fragile, // хрупкий
-    Dangerous, // опасные
+    Dangerous, // опасный
     Liquid, // жидкий
     Perishable // скоропортящийся
 }

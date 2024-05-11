@@ -1,23 +1,24 @@
 ﻿namespace TransportationLab2.Manager;
 
-static class Animation
+public class Animation
 {
     private static List<Point> GetCoordsBetween(Point start, Point end, int count)
     {
-        List<Point> Coords = new List<Point>();
+        List<Point> points = [];
 
-        double distanceX = end.X - start.X;
-        double distanceY = end.Y - start.Y;
-        double stepX = distanceX / (count + 1);
-        double stepY = distanceY / (count + 1);
+        var distanceX = end.X - start.X;
+        var distanceY = end.Y - start.Y;
+        var stepX = distanceX / (count + 1);
+        var stepY = distanceY / (count + 1);
 
-        for (int j = 1; j <= count; j++)
+        for (var j = 1; j <= count; j++)
         {
-            double x = start.X + j * stepX;
-            double y = start.Y + j * stepY;
-            Coords.Add(new Point(x, y));
+            var x = start.X + j * stepX;
+            var y = start.Y + j * stepY;
+            points.Add(new Point(x, y));
         }
-        Coords.Add(end);
-        return Coords;
+
+        points.Add(end);
+        return points;
     }
 }

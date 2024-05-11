@@ -5,12 +5,12 @@ namespace TransportationLab2.Manager;
 
 public class Manager
 {
-    private List<Client.Client> _clients = new();
-    private List<Vehicle.Vehicle> _vehicles = new();
-    private Dictionary<City.City, int> _roads;
-    private Warehouse _warehouse;
-    private List<Thread> _threads;
-    private object _lock = new();
+    private readonly List<Client.Client> _clients = new();
+    private readonly List<Vehicle.Vehicle> _vehicles = new();
+    private List<City.City> _cities;
+    private readonly Warehouse _warehouse;
+    private readonly List<Thread> _threads;
+    private readonly object _lock = new();
 
     // private object _moveLock = new();
     private event Action<Client.Client> _notifyClient; // Event, на который подписывается клиент.
@@ -19,31 +19,30 @@ public class Manager
 
     private event Action<Client.Client> NotifyClient
     {
-        add { _notifyClient += value; }
-        remove { _notifyClient -= value; }
+        add => _notifyClient += value;
+        remove => _notifyClient -= value;
     }
 
     private void CreateRoads()
     {
-        _roads = new Dictionary<City.City, int>
-        {
-            [City.City.Vlg] = 968,
-            [City.City.Spb] = 635,
-            [City.City.Kzn] = 819,
-            [City.City.Smr] = 1065
-        };
+        _cities =
+        [
+            new City.City("Volgograd", 968, new()),
+            new City.City("Saint Petersburg", 635, new()),
+            new City.City("Kazan", 819, new()),
+            new City.City("Samara", 968, new())
+        ];
     }
 
-    private void CreateClients()
+    private void CreateTrucks()
     {
-        Client.Client client = new("Иванов", "Иван", City.City.Kzn);
-        _clients.Add(client);
-        client = new("Андреев", "Андрей", City.City.Spb);
-        _clients.Add(client);
-        client = new("Фролова", "Ольга", City.City.Smr);
-        _clients.Add(client);
-        client = new("Александрова", "Александра", City.City.Vlg);
-        _clients.Add(client);
+        string[] brands = ["Toyota", "Volvo", "Renault", "MAN"];
+        foreach (var brand in brands)
+        {
+            Vehicle.Vehicle truck = new(brand, _vehicles.Count());
+            _vehicles.Add(truck);
+            _threads.Add(new(() => ProcessOrder(_vehicles.Last())));
+        }
     }
 
     private void AssignOrderToVehicle(int clientChoice)
@@ -94,6 +93,7 @@ public class Manager
             }
         }
      */
+
     private void DriveToClient(Vehicle.Vehicle truck)
     {
         truck.State = VehicleState.Driving;
@@ -102,15 +102,15 @@ public class Manager
     private void ProcessOrder(Vehicle.Vehicle vehicle)
     {
         vehicle.State = VehicleState.Driving;
-
-        int timeSleep = _roads[vehicle.TargetCity] * 10;
+        int timeSleep = vehicle.TargetCity.RoadLength * 10;
         Thread.Sleep(timeSleep);
     }
 
     public Manager()
     {
         CreateRoads();
-        CreateClients();
+        CreateTrucks();
+        // CreateClients();
         _warehouse = new();
         _threads = new();
     }
@@ -120,7 +120,7 @@ public class Manager
         _warehouse.FillWarehouse();
     }
 
-    public void CreateVehicle()
+    /*public void CreateVehicle()
     {
         if (_vehicles.Count == 4)
             throw new ManagerException("Truck limit has been succeeded (4 vehicles)");
@@ -128,6 +128,20 @@ public class Manager
         int brandId = new Random().Next(0, brands.Length);
         Vehicle.Vehicle truck = new(brands[brandId], _vehicles.Count + 1);
         _vehicles.Add(truck);
+    }*/
+
+    public void CreateClient()
+    {
+        if (_clients.Count == 8)
+            throw new ManagerException("Client limit has been succeeded (8 clients)");
+        string[] surnames = ["Smith", "Jenkins", "Davis", "Johnson"];
+        string[] names = ["John", "Jane", "Sally", "Jack"];
+        int getSurname = new Random().Next(0, surnames.Length);
+        int getName = new Random().Next(0, names.Length);
+        int getCity = new Random().Next(0, _cities.Count);
+        _clients.Add(new Client.Client(names[getName], 
+            surnames[getSurname],
+            _cities[getCity]));
     }
 
     public void CreateOrder()
@@ -136,8 +150,6 @@ public class Manager
         {
             if (_warehouse.Items.Count == 0)
                 throw new ManagerException("Warehouse is empty and needs restock");
-            if (_vehicles.Count == 0)
-                throw new ManagerException("No vehicles");
             if (_clients.Count == 0)
                 throw new ManagerException("No clients");
             int itemChoice = new Random().Next(0, _warehouse.Items.Count);
