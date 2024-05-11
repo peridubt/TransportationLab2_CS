@@ -6,7 +6,6 @@ public class Client(
     string name,
     string surname,
     City.City city)
-    : IClient
 {
     public string Name { get; } = name;
     public string Surname { get; } = surname;
