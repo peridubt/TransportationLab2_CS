@@ -40,9 +40,7 @@ public class Manager
         int truckChoice = new Random().Next(0, _vehicles.Count);
         _vehicles[truckChoice].Clients?.Enqueue(_clients[clientChoice]);
         _vehicles[truckChoice].TargetCity = _clients[clientChoice].City;
-        var thread = new Thread(() => ProcessOrder(_vehicles[truckChoice]));
-        _threads.Add(thread);
-        _threads.Last().Start();
+        _threads[truckChoice].Start();
     }
 
     private void GiveOrderToClient(Client.Client client)
@@ -51,7 +49,7 @@ public class Manager
         client.Order = null;
     }
 
-    private void DriveToClient(Vehicle.Vehicle truck)
+    private void GoToCity(Vehicle.Vehicle truck, City.City start, City.City end )
     {
         truck.State = VehicleState.Driving;
     }
@@ -79,19 +77,19 @@ public class Manager
 
     public void RestockWarehouse()
     {
-        int range = new Random().Next(0, 3);
+        int range = new Random().Next(0, 4);
         for (int i = 0; i < range; ++i)
             _items.Add(new DangerousFactory("Опасный",
                 new Random().Next(100, 500), _items.Count).CreateCargo());
-        range = new Random().Next(0, 2);
+        range = new Random().Next(0, 3);
         for (int i = 0; i < range; ++i)
             _items.Add(new FragileFactory("Хрупкий",
                 new Random().Next(200, 600), _items.Count).CreateCargo());
-        range = new Random().Next(0, 3);
+        range = new Random().Next(0, 4);
         for (int i = 0; i < range; ++i)
             _items.Add(new LiquidFactory("Жидкий",
                 new Random().Next(400, 900), _items.Count).CreateCargo());
-        range = new Random().Next(0, 2);
+        range = new Random().Next(0, 3);
         for (int i = 0; i < range; ++i)
             _items.Add(new PerishableFactory("Скоропортящийся",
                 new Random().Next(300, 900), _items.Count).CreateCargo());

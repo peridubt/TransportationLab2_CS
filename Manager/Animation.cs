@@ -1,6 +1,4 @@
-﻿using System.Windows.Forms.VisualStyles;
-
-namespace TransportationLab2.Manager;
+﻿namespace TransportationLab2.Manager;
 
 public class Animation
 {
@@ -27,22 +25,22 @@ public class Animation
         return points;
     }
     
-    private void MoveTo(Point end)
+    private void MoveTo(Point end, Point currentPoint )
     {
         /*lock (_moveLock) // Захватываем данный объект(синхронизация)
         {
             try
             {
-                var points = GetCoordsBetween(_currentCoord, end, 20);
+                var points = GetCoordsBetween(currentPoint, end, 20);
                 foreach (var point in points)
                 {
-                    _currentCoord = point;
+                    currentPoint = point;
                     // Так как WPF приложение работает с UI потоком,
                     // то Dispatcher осуществляет синхронизацию UI потока с созданными дополнительно
                     _window.Dispatcher.Invoke(() =>
                     {
-                        Canvas.SetLeft(MyImage, _currentCoord.X);
-                        Canvas.SetTop(MyImage, _currentCoord.Y);
+                        Canvas.SetLeft(MyImage, currentPoint.X);
+                        Canvas.SetTop(MyImage, currentPoint.Y);
                     });
                     Thread.Sleep(100);
                 }
