@@ -2,14 +2,18 @@
 using TransportationLab2.Client;
 using TransportationLab2.Vehicle;
 
-namespace TransportationLab2;
+namespace TransportationLab2.Manager;
 
 public class Manager
 {
-    private List<IClient> _clients = new List<IClient>();
-    private List<IVehicle> _vehicles = new List<IVehicle>();
-    private Dictionary<City.City, int> _roads;
+    private List<IClient> _clients = new();
+    private List<IVehicle> _vehicles = new();
+    private Dictionary<City.City, int>? _roads;
     private Warehouse _warehouse;
+    private List<Thread>? _threads;
+    private Thread? _mainThread;
+    private object _lock = new();
+    private object _moveLock = new();
 
     private void CreateRoads()
     {
@@ -38,22 +42,38 @@ public class Manager
     {
         CreateRoads();
         CreateClients();
-        _warehouse = new Warehouse();
+        _warehouse = new();
+        _threads = new();
+        //_mainThread = new(/*задача*/);
     }
 
     public void CreateVehicle()
     {
         if (_vehicles.Count == 4)
-            throw new ManagerException("Превышен лимит грузовиков (4 шт.)");
+            throw new ManagerException("Truck limit succeeded (4 vehicles)");
         string[] brands = { "Toyota", "Volvo", "Renault", "MAN" };
         int brandId = new Random().Next(0, brands.Length);
-        Vehicle.Vehicle truck = new Vehicle.Vehicle(brands[brandId],
-            _vehicles.Count + 1);
+        Vehicle.Vehicle truck = new(brands[brandId], _vehicles.Count + 1);
         _vehicles.Add(truck);
     }
 
     public void RestockWarehouse()
     {
         _warehouse.FillWarehouse();
+    }
+
+    public void AssignOrder()
+    {
+        lock (_lock)
+        {
+            if (_warehouse.Items.Count == 0)
+                throw new ManagerException("Warehouse is empty and needs restock");
+            int itemChoice = new Random().Next(0, _warehouse.Items.Count);
+            int clientChoice = new Random().Next(0, _clients.Count);
+            _clients[clientChoice].Order = _warehouse.Items[itemChoice];
+            int truckChoice = new Random().Next(0, _vehicles.Count);
+            _vehicles[truckChoice].Clients?.Enqueue(_clients[clientChoice]);
+            _vehicles[truckChoice].TargetCity = _clients[clientChoice].City;
+        }
     }
 }

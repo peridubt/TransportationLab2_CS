@@ -18,10 +18,11 @@ public class Vehicle(
     private Timer _timer = new Timer();
 
     private bool _waitForOrder = true;
-    private Queue<IClient>? Clients { get; }
+    public Queue<IClient>? Clients { get; set; }
     public string CarBrand { get; } = carBrand;
     public int Id { get; } = id;
     public City.City TargetCity { get; set; }
+    public KeyValuePair<ICargo, IClient> order { get; set; }
 
     private event Action NotifyClient
     {
