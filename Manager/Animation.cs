@@ -1,7 +1,12 @@
-﻿namespace TransportationLab2.Manager;
+﻿using System.Windows.Forms.VisualStyles;
+
+namespace TransportationLab2.Manager;
 
 public class Animation
 {
+    private object _moveLock = new();
+    // private readonly VisualStyleElement.Window _window;
+    // private readonly Canvas _canvas;
     private static List<Point> GetCoordsBetween(Point start, Point end, int count)
     {
         List<Point> points = [];
@@ -20,5 +25,32 @@ public class Animation
 
         points.Add(end);
         return points;
+    }
+    
+    private void MoveTo(Point end)
+    {
+        /*lock (_moveLock) // Захватываем данный объект(синхронизация)
+        {
+            try
+            {
+                var points = GetCoordsBetween(_currentCoord, end, 20);
+                foreach (var point in points)
+                {
+                    _currentCoord = point;
+                    // Так как WPF приложение работает с UI потоком,
+                    // то Dispatcher осуществляет синхронизацию UI потока с созданными дополнительно
+                    _window.Dispatcher.Invoke(() =>
+                    {
+                        Canvas.SetLeft(MyImage, _currentCoord.X);
+                        Canvas.SetTop(MyImage, _currentCoord.Y);
+                    });
+                    Thread.Sleep(100);
+                }
+            }
+            finally
+            {
+                State = tempState;
+            }
+        }*/
     }
 }

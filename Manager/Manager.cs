@@ -1,4 +1,5 @@
-﻿using TransportationLab2.Cargo;
+﻿using TransportationLab2.Cargo.Factory;
+using TransportationLab2.Cargo.Unit;
 using TransportationLab2.Vehicle;
 
 namespace TransportationLab2.Manager;
@@ -7,31 +8,20 @@ public class Manager
 {
     private readonly List<Client.Client> _clients = new();
     private readonly List<Vehicle.Vehicle> _vehicles = new();
-    private List<City.City> _cities;
-    private readonly Warehouse _warehouse;
+    private readonly List<City.City> _cities;
+    private readonly List<ICargo> _items = new();
     private readonly List<Thread> _threads;
     private readonly object _lock = new();
 
     // private object _moveLock = new();
-    private event Action<Client.Client> _notifyClient; // Event, на который подписывается клиент.
+    private event Action<Client.Client>? _notifyClient; // Event, на который подписывается клиент.
     // При срабатывании данного события клиент получит заказ, а после чего
     // отпишется от уведомлений по заказу.
 
-    private event Action<Client.Client> NotifyClient
+    private event Action<Client.Client>? NotifyClient
     {
         add => _notifyClient += value;
         remove => _notifyClient -= value;
-    }
-
-    private void CreateRoads()
-    {
-        _cities =
-        [
-            new City.City("Volgograd", 968, new()),
-            new City.City("Saint Petersburg", 635, new()),
-            new City.City("Kazan", 819, new()),
-            new City.City("Samara", 968, new())
-        ];
     }
 
     private void CreateTrucks()
@@ -61,39 +51,6 @@ public class Manager
         client.Order = null;
     }
 
-    // Украдено из чужой лабы:
-    /*
-        // Метод перемещающий объект по Canvas
-        private void MoveTo(Point end)
-        {
-            lock (_moveLock) // Захватываем данный объект(синхронизация)
-            {
-                var tempState = State;
-                try
-                {
-                    State = StateEnum.Moving;   // Изменение статуса клиента
-                    var points = GetCoordsBetween(_currentCoord, end, 20);
-                    foreach (var point in points)
-                    {
-                        _currentCoord = point;
-                        // Так как WPF приложение работает с UI потоком,
-                        // то Dispatcher осуществляет синхронизацию UI потока с созданными дополнительно
-                        _window.Dispatcher.Invoke(() =>
-                        {
-                            Canvas.SetLeft(MyImage, _currentCoord.X);
-                            Canvas.SetTop(MyImage, _currentCoord.Y);
-                        });
-                        Thread.Sleep(100);
-                    }
-                }
-                finally
-                {
-                    State = tempState;
-                }
-            }
-        }
-     */
-
     private void DriveToClient(Vehicle.Vehicle truck)
     {
         truck.State = VehicleState.Driving;
@@ -108,28 +65,38 @@ public class Manager
 
     public Manager()
     {
-        CreateRoads();
+        _cities =
+        [
+            new City.City("Volgograd", 968),
+            new City.City("Saint Petersburg", 635),
+            new City.City("Kazan", 819),
+            new City.City("Samara", 968)
+        ];
         CreateTrucks();
-        // CreateClients();
-        _warehouse = new();
-        _threads = new();
+        RestockWarehouse();
+        _threads = [];
     }
 
     public void RestockWarehouse()
     {
-        _warehouse.FillWarehouse();
+        int range = new Random().Next(0, 3);
+        for (int i = 0; i < range; ++i)
+            _items.Add(new DangerousFactory("Опасный",
+                new Random().Next(100, 500), _items.Count).CreateCargo());
+        range = new Random().Next(0, 2);
+        for (int i = 0; i < range; ++i)
+            _items.Add(new FragileFactory("Хрупкий",
+                new Random().Next(200, 600), _items.Count).CreateCargo());
+        range = new Random().Next(0, 3);
+        for (int i = 0; i < range; ++i)
+            _items.Add(new LiquidFactory("Жидкий",
+                new Random().Next(400, 900), _items.Count).CreateCargo());
+        range = new Random().Next(0, 2);
+        for (int i = 0; i < range; ++i)
+            _items.Add(new PerishableFactory("Скоропортящийся",
+                new Random().Next(300, 900), _items.Count).CreateCargo());
     }
-
-    /*public void CreateVehicle()
-    {
-        if (_vehicles.Count == 4)
-            throw new ManagerException("Truck limit has been succeeded (4 vehicles)");
-        string[] brands = { "Toyota", "Volvo", "Renault", "MAN" };
-        int brandId = new Random().Next(0, brands.Length);
-        Vehicle.Vehicle truck = new(brands[brandId], _vehicles.Count + 1);
-        _vehicles.Add(truck);
-    }*/
-
+    
     public void CreateClient()
     {
         if (_clients.Count == 8)
@@ -148,14 +115,14 @@ public class Manager
     {
         lock (_lock)
         {
-            if (_warehouse.Items.Count == 0)
+            if (_items.Count == 0)
                 throw new ManagerException("Warehouse is empty and needs restock");
             if (_clients.Count == 0)
                 throw new ManagerException("No clients");
-            int itemChoice = new Random().Next(0, _warehouse.Items.Count);
+            int itemChoice = new Random().Next(0, _items.Count);
             int clientChoice = new Random().Next(0, _clients.Count);
-            _clients[clientChoice].Order = _warehouse.Items[itemChoice];
-            _warehouse.Items.RemoveAt(itemChoice);
+            _clients[clientChoice].Order = _items[itemChoice];
+            _items.RemoveAt(itemChoice);
             NotifyClient += GiveOrderToClient;
             AssignOrderToVehicle(clientChoice);
         }
