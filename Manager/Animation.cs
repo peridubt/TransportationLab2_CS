@@ -1,13 +1,11 @@
 ﻿namespace TransportationLab2.Manager;
 
-public class Animation
+public static class Animation
 {
-    private object _moveLock = new();
-    // private readonly VisualStyleElement.Window _window;
-    // private readonly Canvas _canvas;
-    private static List<Point> GetCoordsBetween(Point start, Point end, int count)
+    private static List<System.Drawing.Point> GetCoordsBetween(System.Drawing.Point start,
+        System.Drawing.Point end, int count)
     {
-        List<Point> points = [];
+        List<System.Drawing.Point> points = [];
 
         var distanceX = end.X - start.X;
         var distanceY = end.Y - start.Y;
@@ -18,37 +16,21 @@ public class Animation
         {
             var x = start.X + j * stepX;
             var y = start.Y + j * stepY;
-            points.Add(new Point(x, y));
+            points.Add(new(x, y));
         }
 
         points.Add(end);
         return points;
     }
-    
-    private void MoveTo(Point end, Point currentPoint )
+
+    public static void Move(System.Drawing.Point end, Vehicle.Vehicle truck)
     {
-        /*lock (_moveLock) // Захватываем данный объект(синхронизация)
+        int count = (truck.TargetCity.RoadLength / 100) * 100;
+        var points = GetCoordsBetween(truck.CurrentPos, end, count);
+        foreach (var point in points)
         {
-            try
-            {
-                var points = GetCoordsBetween(currentPoint, end, 20);
-                foreach (var point in points)
-                {
-                    currentPoint = point;
-                    // Так как WPF приложение работает с UI потоком,
-                    // то Dispatcher осуществляет синхронизацию UI потока с созданными дополнительно
-                    _window.Dispatcher.Invoke(() =>
-                    {
-                        Canvas.SetLeft(MyImage, currentPoint.X);
-                        Canvas.SetTop(MyImage, currentPoint.Y);
-                    });
-                    Thread.Sleep(100);
-                }
-            }
-            finally
-            {
-                State = tempState;
-            }
-        }*/
+            truck.VehicleAvatar.Location = new System.Drawing.Point(point.X, point.Y);
+            Thread.Sleep(10);
+        }
     }
 }

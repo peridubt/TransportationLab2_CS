@@ -2,16 +2,10 @@
 
 public class Point
 {
-    public double X { get; set; }
-    public double Y { get; set; }
+    public int X { get; set; }
+    public int Y { get; set; }
 
-    public Point()
-    {
-        X = 0;
-        Y = 0;
-    }
-
-    public Point(double x, double y)
+    public Point(int x = 0, int y = 0)
     {
         X = x;
         Y = y;
