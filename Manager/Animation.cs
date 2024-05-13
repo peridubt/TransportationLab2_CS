@@ -25,12 +25,15 @@ public static class Animation
 
     public static void Move(System.Drawing.Point end, Vehicle.Vehicle truck)
     {
-        int count = (truck.TargetCity.RoadLength / 100) * 100;
-        var points = GetCoordsBetween(truck.CurrentPos, end, count);
-        foreach (var point in points)
+        if (truck.TargetCity != null)
         {
-            truck.VehicleAvatar.Location = new System.Drawing.Point(point.X, point.Y);
-            Thread.Sleep(10);
+            int count = (truck.TargetCity.RoadLength / 100) * 100;
+            var points = GetCoordsBetween(truck.CurrentPos, end, count);
+            foreach (var point in points)
+            {
+                truck.VehicleAvatar.Location = new System.Drawing.Point(point.X, point.Y);
+                Thread.Sleep(10);
+            }
         }
     }
 }

@@ -7,26 +7,11 @@ namespace TransportationLab2.Manager;
 
 public class Manager
 {
-    private readonly List<Client.Client> _clients = new();
+    private readonly List<Client.Client?> _clients = new();
     private readonly List<Vehicle.Vehicle> _vehicles = new();
-    private readonly List<City.City> _cities;
+    private readonly List<City.City?> _cities;
     private readonly List<ICargo> _items = new();
     private readonly object _lock = new();
-
-    private event Action<Client.Client>? _notifyClient; // Event, на который подписывается клиент.
-    // При срабатывании данного события клиент получит заказ, а после чего
-    // отпишется от уведомлений по заказу.
-
-    private event Action<Client.Client>? NotifyClient
-    {
-        add => _notifyClient += value;
-        remove => _notifyClient -= value;
-    }
-
-    private void OnNotifyClient(Client.Client obj)
-    {
-        _notifyClient?.Invoke(obj);
-    }
 
     private void CreateTrucks()
     {
@@ -41,25 +26,14 @@ public class Manager
     private void AssignOrderToVehicle(int clientChoice)
     {
         int truckChoice = new Random().Next(0, _vehicles.Count);
+        _vehicles[truckChoice].TargetCity = _clients[clientChoice]?.City;
         _vehicles[truckChoice].Clients?.Enqueue(_clients[clientChoice]);
-        _vehicles[truckChoice].TargetCity = _clients[clientChoice].City;
-    }
-
-    private void GiveOrderToClient(Client.Client client)
-    {
-        client.State = Client.ClientState.RecievingOrder;
-        client.Order = null;
-    }
-
-    private void GoToCity(Vehicle.Vehicle truck, City.City start, City.City end)
-    {
-        truck.State = VehicleState.Driving;
     }
 
     public Manager()
     {
         _cities =
-            new List<City.City>
+            new List<City.City?>
             {
                 new City.City("Volgograd", 968),
                 new City.City("Saint Petersburg", 635),
@@ -116,8 +90,8 @@ public class Manager
             int clientChoice = new Random().Next(0, _clients.Count);
             _clients[clientChoice].Order = _items[itemChoice];
             _clients[clientChoice].State = ClientState.WaitingForOrder;
+
             _items.RemoveAt(itemChoice);
-            NotifyClient += GiveOrderToClient;
             AssignOrderToVehicle(clientChoice);
         }
     }
