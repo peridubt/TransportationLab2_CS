@@ -10,7 +10,7 @@ public class Manager
     private readonly List<Vehicle.Vehicle> _vehicles = new();
     private readonly List<City.City?> _cities;
     private readonly List<ICargo> _items = new();
-    private readonly List<Thread> _threads = new();
+    // private readonly List<Thread> _threads = new();
     private readonly object _lock = new();
 
     // TODO: организовать потоки до конца (возможно, пул потоков)
@@ -40,10 +40,10 @@ public class Manager
         _cities =
             new List<City.City?>
             {
-                new City.City("Volgograd", 968),
-                new City.City("Saint Petersburg", 635),
-                new City.City("Kazan", 819),
-                new City.City("Samara", 1065)
+                new("Volgograd", 968),
+                new("Saint Petersburg", 635),
+                new("Kazan", 819),
+                new("Samara", 1065)
             };
         RestockWarehouse();
     }
@@ -88,11 +88,11 @@ public class Manager
         lock (_lock)
         {
             if (_items.Count == 0)
-                throw new ManagerException("Warehouse is empty and needs restock");
+                throw new EmptyWarehouseException("Warehouse is empty and needs restock");
             if (_clients.Count == 0)
-                throw new ManagerException("No clients");
+                throw new NoClientsException("No clients");
             if (_vehicles.Count == 0)
-                throw new ManagerException("No vehicles");
+                throw new NoVehiclesException("No vehicles");
             int itemChoice = new Random().Next(0, _items.Count);
             int clientChoice = new Random().Next(0, _clients.Count);
             _clients[clientChoice].Order = _items[itemChoice];

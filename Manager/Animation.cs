@@ -1,4 +1,6 @@
-﻿namespace TransportationLab2.Manager;
+﻿using System.Drawing.Imaging;
+
+namespace TransportationLab2.Manager;
 
 public static class Animation
 {
@@ -21,6 +23,30 @@ public static class Animation
 
         points.Add(end);
         return points;
+    }
+
+    public static void CreateImage(Vehicle.Vehicle vehicle)
+    {
+        vehicle.VehicleAvatar.Image = Image.FromFile("C:\\Users\\leoni\\OneDrive\\Рабочий стол\\" +
+                                                     "My Labs\\CSharp\\TransportationLab2\\Resources\\truck.png");
+        vehicle.VehicleAvatar.Visible = true;
+        vehicle.VehicleAvatar.Location = new Point(505, 380);
+        vehicle.VehicleAvatar.Size = new Size(100, 50);
+        vehicle.VehicleAvatar.SizeMode = PictureBoxSizeMode.StretchImage;
+        vehicle.VehicleAvatar.TabStop = false;
+        vehicle.VehicleAvatar.BackColor = Color.Transparent;
+
+        /*
+           mskPictureBox.BackColor = Color.Transparent;
+           mskPictureBox.BackgroundImageLayout = ImageLayout.None;
+           mskPictureBox.Image = (Image)resources.GetObject("mskPictureBox.Image");
+           mskPictureBox.Location = new Point(525, 380);
+           mskPictureBox.Name = "mskPictureBox";
+           mskPictureBox.Size = new Size(39, 62);
+           mskPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+           mskPictureBox.TabIndex = 13;
+           mskPictureBox.TabStop = false;
+         */
     }
 
     public static void Move(Point end, Vehicle.Vehicle truck)

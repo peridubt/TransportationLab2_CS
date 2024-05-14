@@ -7,7 +7,6 @@ public class Vehicle
 {
     private readonly Thread _thread;
     private event Action? _notifyClient; // Event, на который подписывается клиент.
-
     // При срабатывании данного события клиент получит заказ, а после чего
     // отпишется от уведомлений по заказу.
     public Queue<Client.Client?>? Clients { get; } = new();
@@ -27,7 +26,8 @@ public class Vehicle
     {
         CarBrand = carBrand;
         Id = id;
-        _thread = new Thread(ProcessOrders);
+        Animation.CreateImage(this);
+        _thread = new Thread(ProcessOrders){ IsBackground = false };
         _thread.Start();
     }
 
