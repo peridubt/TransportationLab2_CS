@@ -16,7 +16,7 @@ public class Vehicle
     public City.City? TargetCity { get; set; } = new();
     public VehicleState State { get; set; } = VehicleState.Waiting;
     public PictureBox VehicleAvatar = new();
-    public System.Drawing.Point CurrentPos { get; set; } = new();
+    public Point CurrentPos { get; set; } = new();
 
     private void OnNotifyClient()
     {
@@ -31,6 +31,28 @@ public class Vehicle
         _thread.Start();
     }
 
+    private void DriveToClient(Client.Client client)
+    {
+        _notifyClient += client.RecieveOrder;
+        State = VehicleState.Driving;
+        Animation.Move(TargetCity.Coordinates, this);
+    }
+
+    private void Offload(Client.Client client)
+    {
+        State = VehicleState.Offloading;
+        Thread.Sleep(1000);
+        OnNotifyClient();
+        Clients?.Dequeue();
+        _notifyClient -= client.RecieveOrder;
+    }
+
+    private void DriveBack(System.Drawing.Point prevPoint)
+    {
+        Animation.Move(prevPoint, this);
+        State = VehicleState.Waiting;
+    }
+    
     public void ProcessOrders()
     {
         while (true) // заходим в бесконечный цикл
@@ -42,16 +64,12 @@ public class Vehicle
             var client = Clients?.Peek();
             if (client != null)
             {
-                _notifyClient += client.RecieveOrder;
-                State = VehicleState.Driving;
-                Debug.Assert(TargetCity != null, nameof(TargetCity) + " != null");
-                Animation.Move(TargetCity.Coordinates, this);
-                Thread.Sleep(1000);
-                OnNotifyClient();
-                Clients?.Dequeue();
-                _notifyClient -= client.RecieveOrder;
+                var prevPoint = CurrentPos;
+                DriveToClient(client);
+                Offload(client);
+                DriveBack(prevPoint);
             }
-
+            
             // TargetCity = Москва -- едем обратно
             // Animation.Move(В Москву);
         }
