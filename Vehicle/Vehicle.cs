@@ -26,7 +26,7 @@ public class Vehicle
     {
         CarBrand = carBrand;
         Id = id;
-        Animation.CreateImage(this);
+        // Animation.CreateImage(this);
         _thread = new Thread(ProcessOrders){ IsBackground = false };
         _thread.Start();
     }

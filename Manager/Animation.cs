@@ -35,18 +35,7 @@ public static class Animation
         vehicle.VehicleAvatar.SizeMode = PictureBoxSizeMode.StretchImage;
         vehicle.VehicleAvatar.TabStop = false;
         vehicle.VehicleAvatar.BackColor = Color.Transparent;
-
-        /*
-           mskPictureBox.BackColor = Color.Transparent;
-           mskPictureBox.BackgroundImageLayout = ImageLayout.None;
-           mskPictureBox.Image = (Image)resources.GetObject("mskPictureBox.Image");
-           mskPictureBox.Location = new Point(525, 380);
-           mskPictureBox.Name = "mskPictureBox";
-           mskPictureBox.Size = new Size(39, 62);
-           mskPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
-           mskPictureBox.TabIndex = 13;
-           mskPictureBox.TabStop = false;
-         */
+        vehicle.VehicleAvatar.Show();
     }
 
     public static void Move(Point end, Vehicle.Vehicle truck)

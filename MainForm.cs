@@ -3,6 +3,7 @@ namespace TransportationLab2
     public partial class MainForm : Form
     {
         private readonly Manager.Manager _manager = new();
+        // public readonly PictureBox TruckPictureBox = new();
         public MainForm()
         {
             InitializeComponent();
@@ -13,6 +14,13 @@ namespace TransportationLab2
             try
             {
                 _manager.CreateVehicle();
+                /*TruckPictureBox.Image = Image.FromFile("C:\\Users\\leoni\\OneDrive\\Рабочий стол\\My Labs" +
+                                                       "\\CSharp\\TransportationLab2\\Resources\\truck.png");
+                TruckPictureBox.Visible = true;
+                TruckPictureBox.Location = new Point(505, 380);
+                TruckPictureBox.Size = new Size(500, 300);
+                TruckPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+                TruckPictureBox.Show();*/
             }
             catch (ManagerException ex)
             {
