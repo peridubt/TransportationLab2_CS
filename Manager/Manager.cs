@@ -23,6 +23,16 @@ public class Manager
         int truckChoice = new Random().Next(0, _vehicles.Count);
         _vehicles[truckChoice].TargetCity = _clients[clientChoice]?.City;
         _vehicles[truckChoice].Clients?.Enqueue(_clients[clientChoice]);
+        //_threads[truckChoice].Start();
+    }
+    
+    private void CargoInit(ICargoFactory factory)
+    {
+        int range = new Random().Next(0, 5);
+        for (int i = 0; i < range; ++i)
+        {
+            _items.Add(factory.CreateCargo());
+        }
     }
 
     public Manager()
@@ -36,15 +46,6 @@ public class Manager
                 new City.City("Samara", 1065)
             };
         RestockWarehouse();
-    }
-
-    private void CargoInit(ICargoFactory factory)
-    {
-        int range = new Random().Next(0, 5);
-        for (int i = 0; i < range; ++i)
-        {
-            _items.Add(factory.CreateCargo());
-        }
     }
 
     public void RestockWarehouse()
@@ -63,6 +64,8 @@ public class Manager
             var brandChoice = new Random().Next(0, brands.Length);
             var truck = new Vehicle.Vehicle(brands[brandChoice], _vehicles.Count);
             _vehicles.Add(truck);
+            // var thread = new Thread(truck.ProcessOrders);
+            // _threads.Add(thread);
         }
     }
     
