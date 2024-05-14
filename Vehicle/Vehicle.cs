@@ -1,17 +1,17 @@
-﻿using System.Diagnostics;
+﻿using TransportationLab2.Client;
 using TransportationLab2.Manager;
 
 namespace TransportationLab2.Vehicle;
 
 public class Vehicle
 {
-    private Thread _thread;
-
+    private readonly Thread _thread;
     private event Action? _notifyClient; // Event, на который подписывается клиент.
+
     // При срабатывании данного события клиент получит заказ, а после чего
     // отпишется от уведомлений по заказу.
     public Queue<Client.Client?>? Clients { get; } = new();
-    public string CarBrand { get; }
+    public  string CarBrand { get; }
     public int Id { get; }
     public City.City? TargetCity { get; set; } = new();
     public VehicleState State { get; set; } = VehicleState.Waiting;
@@ -35,24 +35,27 @@ public class Vehicle
     {
         _notifyClient += client.RecieveOrder;
         State = VehicleState.Driving;
+        Clients.Peek().State = ClientState.WaitingForOrder;
         Animation.Move(TargetCity.Coordinates, this);
     }
 
     private void Offload(Client.Client client)
     {
         State = VehicleState.Offloading;
+        Clients.Peek().State = ClientState.RecievingOrder;
         Thread.Sleep(1000);
         OnNotifyClient();
+        Clients.Peek().State = ClientState.Inactive;
         Clients?.Dequeue();
         _notifyClient -= client.RecieveOrder;
     }
 
-    private void DriveBack(System.Drawing.Point prevPoint)
+    private void DriveBack(Point prevPoint)
     {
         Animation.Move(prevPoint, this);
         State = VehicleState.Waiting;
     }
-    
+
     public void ProcessOrders()
     {
         while (true) // заходим в бесконечный цикл
@@ -69,9 +72,6 @@ public class Vehicle
                 Offload(client);
                 DriveBack(prevPoint);
             }
-            
-            // TargetCity = Москва -- едем обратно
-            // Animation.Move(В Москву);
         }
     }
 }

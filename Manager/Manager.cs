@@ -1,7 +1,6 @@
 ﻿using TransportationLab2.Cargo.Factory;
 using TransportationLab2.Cargo.Unit;
 using TransportationLab2.Client;
-using TransportationLab2.Vehicle;
 
 namespace TransportationLab2.Manager;
 
@@ -11,17 +10,13 @@ public class Manager
     private readonly List<Vehicle.Vehicle> _vehicles = new();
     private readonly List<City.City?> _cities;
     private readonly List<ICargo> _items = new();
+    private readonly List<Thread> _threads = new();
     private readonly object _lock = new();
 
-    private void CreateTrucks()
-    {
-        string[] brands = ["Toyota", "Volvo", "Renault", "MAN"];
-        foreach (var brand in brands)
-        {
-            Vehicle.Vehicle truck = new(brand, _vehicles.Count());
-            _vehicles.Add(truck);
-        }
-    }
+    // TODO: организовать потоки до конца (возможно, пул потоков)
+    // TODO: посмотреть, будет ли работать модель с массивом/списком потоков
+    // TODO: сделать графическую часть, протестировать
+    // TODO: сделать добавление грузовика пользователем, а не автоматическое создание
 
     private void AssignOrderToVehicle(int clientChoice)
     {
@@ -38,32 +33,39 @@ public class Manager
                 new City.City("Volgograd", 968),
                 new City.City("Saint Petersburg", 635),
                 new City.City("Kazan", 819),
-                new City.City("Samara", 968)
+                new City.City("Samara", 1065)
             };
-        CreateTrucks();
         RestockWarehouse();
+    }
+
+    private void CargoInit(ICargoFactory factory)
+    {
+        int range = new Random().Next(0, 5);
+        for (int i = 0; i < range; ++i)
+        {
+            _items.Add(factory.CreateCargo());
+        }
     }
 
     public void RestockWarehouse()
     {
-        int range = new Random().Next(0, 4);
-        for (int i = 0; i < range; ++i)
-            _items.Add(new DangerousFactory("Опасный",
-                new Random().Next(100, 500), _items.Count).CreateCargo());
-        range = new Random().Next(0, 3);
-        for (int i = 0; i < range; ++i)
-            _items.Add(new FragileFactory("Хрупкий",
-                new Random().Next(200, 600), _items.Count).CreateCargo());
-        range = new Random().Next(0, 4);
-        for (int i = 0; i < range; ++i)
-            _items.Add(new LiquidFactory("Жидкий",
-                new Random().Next(400, 900), _items.Count).CreateCargo());
-        range = new Random().Next(0, 3);
-        for (int i = 0; i < range; ++i)
-            _items.Add(new PerishableFactory("Скоропортящийся",
-                new Random().Next(300, 900), _items.Count).CreateCargo());
+        CargoInit(new DangerousFactory("Dangerous", new Random().Next(100, 500), _items.Count));
+        CargoInit(new FragileFactory("Fragile", new Random().Next(200, 600), _items.Count));
+        CargoInit(new LiquidFactory("Liquid", new Random().Next(400, 900), _items.Count));
+        CargoInit(new PerishableFactory("Perishable", new Random().Next(300, 900), _items.Count));
     }
 
+    public void CreateVehicle()
+    {
+        lock (_lock)
+        {
+            string[] brands = ["Toyota", "Volvo", "Renault", "MAN"];
+            var brandChoice = new Random().Next(0, brands.Length);
+            var truck = new Vehicle.Vehicle(brands[brandChoice], _vehicles.Count);
+            _vehicles.Add(truck);
+        }
+    }
+    
     public void CreateClient()
     {
         if (_clients.Count == 8)
@@ -77,7 +79,7 @@ public class Manager
             surnames[getSurname],
             _cities[getCity]));
     }
-
+    
     public void CreateOrder()
     {
         lock (_lock)
@@ -86,6 +88,8 @@ public class Manager
                 throw new ManagerException("Warehouse is empty and needs restock");
             if (_clients.Count == 0)
                 throw new ManagerException("No clients");
+            if (_vehicles.Count == 0)
+                throw new ManagerException("No vehicles");
             int itemChoice = new Random().Next(0, _items.Count);
             int clientChoice = new Random().Next(0, _clients.Count);
             _clients[clientChoice].Order = _items[itemChoice];

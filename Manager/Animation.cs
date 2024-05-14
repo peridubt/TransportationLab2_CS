@@ -2,10 +2,10 @@
 
 public static class Animation
 {
-    private static List<System.Drawing.Point> GetCoordsBetween(System.Drawing.Point start,
-        System.Drawing.Point end, int count)
+    private static List<Point> GetCoordsBetween(Point start,
+        Point end, int count)
     {
-        List<System.Drawing.Point> points = [];
+        List<Point> points = [];
 
         var distanceX = end.X - start.X;
         var distanceY = end.Y - start.Y;
@@ -23,7 +23,7 @@ public static class Animation
         return points;
     }
 
-    public static void Move(System.Drawing.Point end, Vehicle.Vehicle truck)
+    public static void Move(Point end, Vehicle.Vehicle truck)
     {
         if (truck.TargetCity != null)
         {
@@ -31,7 +31,7 @@ public static class Animation
             var points = GetCoordsBetween(truck.CurrentPos, end, count);
             foreach (var point in points)
             {
-                truck.VehicleAvatar.Location = new System.Drawing.Point(point.X, point.Y);
+                truck.VehicleAvatar.Location = new Point(point.X, point.Y);
                 Thread.Sleep(10);
             }
         }
