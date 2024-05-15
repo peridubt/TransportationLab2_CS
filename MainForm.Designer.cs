@@ -36,8 +36,8 @@ namespace TransportationLab2
             addVehicleButton = new Button();
             vehiclesLabel = new Label();
             clientsLabel = new Label();
-            vehiclesListView = new ListView();
-            clientsListView = new ListView();
+            vehiclesView = new ListView();
+            clientsView = new ListView();
             spbPictureBox = new PictureBox();
             kznPictureBox = new PictureBox();
             smrPictureBox = new PictureBox();
@@ -46,6 +46,7 @@ namespace TransportationLab2
             viewWarehouseButton = new Button();
             createOrderButton = new Button();
             mapPictureBox = new PictureBox();
+            restockWarehouseButton = new Button();
             ((System.ComponentModel.ISupportInitialize)spbPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)kznPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)smrPictureBox).BeginInit();
@@ -82,7 +83,7 @@ namespace TransportationLab2
             vehiclesLabel.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
             vehiclesLabel.Location = new Point(1, 178);
             vehiclesLabel.Name = "vehiclesLabel";
-            vehiclesLabel.Size = new Size(187, 30);
+            vehiclesLabel.Size = new Size(239, 38);
             vehiclesLabel.TabIndex = 4;
             vehiclesLabel.Text = "Available vehicles:";
             // 
@@ -92,25 +93,27 @@ namespace TransportationLab2
             clientsLabel.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
             clientsLabel.Location = new Point(1, 616);
             clientsLabel.Name = "clientsLabel";
-            clientsLabel.Size = new Size(171, 30);
+            clientsLabel.Size = new Size(220, 38);
             clientsLabel.TabIndex = 5;
             clientsLabel.Text = "Available clients:";
             // 
             // vehiclesListView
             // 
-            vehiclesListView.Location = new Point(1, 212);
-            vehiclesListView.Name = "vehiclesListView";
-            vehiclesListView.Size = new Size(215, 230);
-            vehiclesListView.TabIndex = 6;
-            vehiclesListView.UseCompatibleStateImageBehavior = false;
+            vehiclesView.Location = new Point(1, 219);
+            vehiclesView.Name = "vehiclesView";
+            vehiclesView.Size = new Size(215, 230);
+            vehiclesView.TabIndex = 6;
+            vehiclesView.UseCompatibleStateImageBehavior = false;
+            vehiclesView.Font =  new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 204);
             // 
             // clientsListView
             // 
-            clientsListView.Location = new Point(1, 649);
-            clientsListView.Name = "clientsListView";
-            clientsListView.Size = new Size(215, 230);
-            clientsListView.TabIndex = 7;
-            clientsListView.UseCompatibleStateImageBehavior = false;
+            clientsView.Location = new Point(1, 657);
+            clientsView.Name = "clientsView";
+            clientsView.Size = new Size(215, 230);
+            clientsView.TabIndex = 7;
+            clientsView.UseCompatibleStateImageBehavior = false;
+            clientsView.Font =  new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 204);
             // 
             // spbPictureBox
             // 
@@ -180,9 +183,9 @@ namespace TransportationLab2
             // viewWarehouseButton
             // 
             viewWarehouseButton.Font = new Font("Segoe UI", 13.8F);
-            viewWarehouseButton.Location = new Point(254, 25);
+            viewWarehouseButton.Location = new Point(254, 13);
             viewWarehouseButton.Name = "viewWarehouseButton";
-            viewWarehouseButton.Size = new Size(215, 66);
+            viewWarehouseButton.Size = new Size(215, 78);
             viewWarehouseButton.TabIndex = 14;
             viewWarehouseButton.Text = "View warehouse";
             viewWarehouseButton.UseVisualStyleBackColor = true;
@@ -191,9 +194,9 @@ namespace TransportationLab2
             // createOrderButton
             // 
             createOrderButton.Font = new Font("Segoe UI", 13.8F);
-            createOrderButton.Location = new Point(525, 25);
+            createOrderButton.Location = new Point(855, 13);
             createOrderButton.Name = "createOrderButton";
-            createOrderButton.Size = new Size(215, 66);
+            createOrderButton.Size = new Size(215, 78);
             createOrderButton.TabIndex = 15;
             createOrderButton.Text = "Create order";
             createOrderButton.UseVisualStyleBackColor = true;
@@ -204,15 +207,28 @@ namespace TransportationLab2
             mapPictureBox.Image = (Image)resources.GetObject("mapPictureBox.Image");
             mapPictureBox.Location = new Point(254, 109);
             mapPictureBox.Name = "mapPictureBox";
-            mapPictureBox.Size = new Size(929, 800);
+            mapPictureBox.Size = new Size(825, 800);
             mapPictureBox.TabIndex = 16;
             mapPictureBox.TabStop = false;
+            mapPictureBox.Visible = false;
+            // 
+            // restockWarehouseButton
+            // 
+            restockWarehouseButton.Font = new Font("Segoe UI", 13.8F);
+            restockWarehouseButton.Location = new Point(500, 13);
+            restockWarehouseButton.Name = "restockWarehouseButton";
+            restockWarehouseButton.Size = new Size(215, 78);
+            restockWarehouseButton.TabIndex = 17;
+            restockWarehouseButton.Text = "Restock warehouse";
+            restockWarehouseButton.UseVisualStyleBackColor = true;
+            restockWarehouseButton.Click += RestockWarehouseButton_Click;
             // 
             // MainForm
             // 
-            AutoScaleDimensions = new SizeF(9F, 21F);
+            AutoScaleDimensions = new SizeF(11F, 28F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1184, 911);
+            ClientSize = new Size(1082, 911);
+            Controls.Add(restockWarehouseButton);
             Controls.Add(createOrderButton);
             Controls.Add(viewWarehouseButton);
             Controls.Add(mskPictureBox);
@@ -220,13 +236,14 @@ namespace TransportationLab2
             Controls.Add(smrPictureBox);
             Controls.Add(kznPictureBox);
             Controls.Add(spbPictureBox);
-            Controls.Add(clientsListView);
-            Controls.Add(vehiclesListView);
+            Controls.Add(clientsView);
+            Controls.Add(vehiclesView);
             Controls.Add(clientsLabel);
             Controls.Add(vehiclesLabel);
             Controls.Add(addVehicleButton);
             Controls.Add(addClientButton);
             Controls.Add(mapPictureBox);
+            Load += MainForm_Load;
             Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4);
@@ -247,8 +264,8 @@ namespace TransportationLab2
         private Button addVehicleButton;
         private Label vehiclesLabel;
         private Label clientsLabel;
-        private ListView vehiclesListView;
-        private ListView clientsListView;
+        private ListView vehiclesView;
+        private ListView clientsView;
         private PictureBox spbPictureBox;
         private PictureBox kznPictureBox;
         private PictureBox smrPictureBox;
@@ -257,5 +274,6 @@ namespace TransportationLab2
         private Button viewWarehouseButton;
         private Button createOrderButton;
         private PictureBox mapPictureBox;
+        private Button restockWarehouseButton;
     }
 }

@@ -2,29 +2,28 @@ namespace TransportationLab2
 {
     public partial class MainForm : Form
     {
-        private readonly Manager.Manager _manager = new();
-        // public readonly PictureBox TruckPictureBox = new();
+        private Manager.Manager _manager;
         public MainForm()
         {
             InitializeComponent();
+        }
+
+        public void MainForm_Load(object sender, EventArgs e)
+        {
+            _manager = new(ref clientsView, ref vehiclesView);
         }
 
         private void AddVehicleButton_Click(object sender, EventArgs e)
         {
             try
             {
-                _manager.CreateVehicle();
-                /*TruckPictureBox.Image = Image.FromFile("C:\\Users\\leoni\\OneDrive\\Рабочий стол\\My Labs" +
-                                                       "\\CSharp\\TransportationLab2\\Resources\\truck.png");
-                TruckPictureBox.Visible = true;
-                TruckPictureBox.Location = new Point(505, 380);
-                TruckPictureBox.Size = new Size(500, 300);
-                TruckPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
-                TruckPictureBox.Show();*/
+                PictureBox vehcilePBox = new();
+                _manager.CreateVehicle(ref vehcilePBox);
+                Controls.Add(vehcilePBox);
             }
             catch (ManagerException ex)
             {
-                MessageBox.Show(ex.Message, "Error!", 
+                MessageBox.Show(ex.Message, "Error!",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -50,7 +49,7 @@ namespace TransportationLab2
             }
             catch (ManagerException ex)
             {
-                MessageBox.Show(ex.Message, "Error!", 
+                MessageBox.Show(ex.Message, "Error!",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -69,7 +68,7 @@ namespace TransportationLab2
         {
 
         }
-        
+
         private void KznPictureBox_Click(object sender, EventArgs e)
         {
 
@@ -83,6 +82,11 @@ namespace TransportationLab2
         private void VlgPictureBox_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void RestockWarehouseButton_Click(object sender, EventArgs e)
+        {
+            _manager.RestockWarehouse();
         }
     }
 }
