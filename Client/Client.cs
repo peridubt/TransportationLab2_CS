@@ -18,4 +18,9 @@ public class Client(
         State = ClientState.RecievingOrder;
         Order = null;
     }
+
+    public override string ToString()
+    {
+        return Name + " " + Surname + " [" + State.ToString() + "]";
+    }
 }

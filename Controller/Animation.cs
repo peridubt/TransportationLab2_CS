@@ -28,7 +28,7 @@ public static class Animation
         vehicle.VehicleAvatar.Image = Image.FromFile("C:\\Users\\honor\\Desktop\\Лабы\\CSharp\\" +
             "TransportationLab2\\Resources\\truck.png");
         vehicle.VehicleAvatar.Visible = false;
-        vehicle.VehicleAvatar.Location = new Point(525, 380);
+        vehicle.VehicleAvatar.Location = new Point(544, 426);
         vehicle.CurrentPos = vehicle.VehicleAvatar.Location;
         vehicle.VehicleAvatar.Size = new Size(100, 50);
         vehicle.VehicleAvatar.SizeMode = PictureBoxSizeMode.StretchImage;

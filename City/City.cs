@@ -13,4 +13,9 @@ public class City
         RoadLength = roadLength;
         Coordinates = coordinates;
     }
+
+    public override string ToString()
+    {
+        return Name;
+    }
 }

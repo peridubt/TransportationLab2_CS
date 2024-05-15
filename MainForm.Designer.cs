@@ -46,11 +46,11 @@ namespace TransportationLab2
             viewWarehouseButton = new Button();
             createOrderButton = new Button();
             restockWarehouseButton = new Button();
-            label1 = new Label();
-            label2 = new Label();
-            label3 = new Label();
-            label4 = new Label();
-            label5 = new Label();
+            spbLabel = new Label();
+            mskLabel = new Label();
+            kaznLabel = new Label();
+            smrLabel = new Label();
+            vlgLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)spbPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)kznPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)smrPictureBox).BeginInit();
@@ -213,55 +213,63 @@ namespace TransportationLab2
             restockWarehouseButton.UseVisualStyleBackColor = true;
             restockWarehouseButton.Click += RestockWarehouseButton_Click;
             // 
-            // label1
+            // spbLabel
             // 
-            label1.AutoSize = true;
-            label1.BackColor = Color.Transparent;
-            label1.Location = new Point(340, 228);
-            label1.Name = "label1";
-            label1.Size = new Size(155, 28);
-            label1.TabIndex = 18;
-            label1.Text = "Saint Petersburg";
+            spbLabel.AutoSize = true;
+            spbLabel.BackColor = Color.Transparent;
+            spbLabel.Cursor = Cursors.Hand;
+            spbLabel.Location = new Point(340, 228);
+            spbLabel.Name = "spbLabel";
+            spbLabel.Size = new Size(155, 28);
+            spbLabel.TabIndex = 18;
+            spbLabel.Text = "Saint Petersburg";
+            spbLabel.Click += SpbLabel_Click;
             // 
-            // label2
+            // mskLabel
             // 
-            label2.AutoSize = true;
-            label2.BackColor = Color.Transparent;
-            label2.Location = new Point(528, 395);
-            label2.Name = "label2";
-            label2.Size = new Size(85, 28);
-            label2.TabIndex = 19;
-            label2.Text = "Moscow";
+            mskLabel.AutoSize = true;
+            mskLabel.BackColor = Color.Transparent;
+            mskLabel.Location = new Point(528, 395);
+            mskLabel.Name = "mskLabel";
+            mskLabel.Size = new Size(85, 28);
+            mskLabel.TabIndex = 19;
+            mskLabel.Text = "Moscow";
             // 
-            // label3
+            // kaznLabel
             // 
-            label3.AutoSize = true;
-            label3.BackColor = Color.Transparent;
-            label3.Location = new Point(918, 377);
-            label3.Name = "label3";
-            label3.Size = new Size(64, 28);
-            label3.TabIndex = 20;
-            label3.Text = "Kazan";
+            kaznLabel.AutoSize = true;
+            kaznLabel.BackColor = Color.Transparent;
+            kaznLabel.Cursor = Cursors.Hand;
+            kaznLabel.Location = new Point(918, 377);
+            kaznLabel.Name = "kaznLabel";
+            kaznLabel.Size = new Size(64, 28);
+            kaznLabel.TabIndex = 20;
+            kaznLabel.Text = "Kazan";
+            kaznLabel.Click += KznLabel_Click;
             // 
-            // label4
+            // smrLabel
             // 
-            label4.AutoSize = true;
-            label4.BackColor = Color.Transparent;
-            label4.Location = new Point(970, 520);
-            label4.Name = "label4";
-            label4.Size = new Size(77, 28);
-            label4.TabIndex = 21;
-            label4.Text = "Samara";
+            smrLabel.AutoSize = true;
+            smrLabel.BackColor = Color.Transparent;
+            smrLabel.Cursor = Cursors.Hand;
+            smrLabel.Location = new Point(970, 520);
+            smrLabel.Name = "smrLabel";
+            smrLabel.Size = new Size(77, 28);
+            smrLabel.TabIndex = 21;
+            smrLabel.Text = "Samara";
+            smrLabel.Click += SmrLabel_Click;
             // 
-            // label5
+            // vlgLabel
             // 
-            label5.AutoSize = true;
-            label5.BackColor = Color.Transparent;
-            label5.Location = new Point(785, 806);
-            label5.Name = "label5";
-            label5.Size = new Size(105, 28);
-            label5.TabIndex = 22;
-            label5.Text = "Volgograd";
+            vlgLabel.AutoSize = true;
+            vlgLabel.BackColor = Color.Transparent;
+            vlgLabel.Cursor = Cursors.Hand;
+            vlgLabel.Location = new Point(785, 806);
+            vlgLabel.Name = "vlgLabel";
+            vlgLabel.Size = new Size(105, 28);
+            vlgLabel.TabIndex = 22;
+            vlgLabel.Text = "Volgograd";
+            vlgLabel.Click += VlgLabel_Click;
             // 
             // MainForm
             // 
@@ -269,11 +277,11 @@ namespace TransportationLab2
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             ClientSize = new Size(1082, 911);
-            Controls.Add(label5);
-            Controls.Add(label4);
-            Controls.Add(label3);
-            Controls.Add(label2);
-            Controls.Add(label1);
+            Controls.Add(vlgLabel);
+            Controls.Add(smrLabel);
+            Controls.Add(kaznLabel);
+            Controls.Add(mskLabel);
+            Controls.Add(spbLabel);
             Controls.Add(restockWarehouseButton);
             Controls.Add(createOrderButton);
             Controls.Add(viewWarehouseButton);
@@ -318,10 +326,10 @@ namespace TransportationLab2
         private Button viewWarehouseButton;
         private Button createOrderButton;
         private Button restockWarehouseButton;
-        private Label label1;
-        private Label label2;
-        private Label label3;
-        private Label label4;
-        private Label label5;
+        private Label spbLabel;
+        private Label mskLabel;
+        private Label kaznLabel;
+        private Label smrLabel;
+        private Label vlgLabel;
     }
 }

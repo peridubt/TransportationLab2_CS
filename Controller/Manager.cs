@@ -8,6 +8,8 @@ namespace TransportationLab2.Controller;
 
 public class Manager
 {
+    private const int _maxClients = 10;
+    private const int _maxVehicles = 5;
     private readonly List<Client.Client?> _clients = new();
     private readonly List<Vehicle.Vehicle> _vehicles = new();
     private readonly List<City.City?> _cities;
@@ -20,6 +22,8 @@ public class Manager
     private event Action? NotifyClient; // Event, на который подписывается клиент.
     // При срабатывании данного события клиент получит заказ, а после чего
     // отпишется от уведомлений по заказу.
+
+    public List<Client.Client> Clients { get=>_clients; }
     private void OnNotifyClient()
     {
         NotifyClient?.Invoke();
@@ -103,10 +107,10 @@ public class Manager
         _cities =
             new List<City.City?>
             {
-                new("Volgograd", 1065, new(797, 798)),
-                new("Saint Petersburg", 635, new(338, 109)),
-                new("Kazan", 819, new(910, 354)),
-                new("Samara", 968, new(971, 511))
+                new("Volgograd", 1065, new(811, 837)),
+                new("Saint Petersburg", 635, new(360, 163)),
+                new("Kazan", 819, new(929, 408)),
+                new("Samara", 968, new(998, 551))
             };
         RestockWarehouse();
     }
@@ -130,8 +134,8 @@ public class Manager
     {
         lock (_lock)
         {
-            if (_vehicles.Count + _activeVehicles.Count == 4)
-                throw new ManagerException("Vehicle limit has been succeeded (4 vehicles)");
+            if (_vehicles.Count + _activeVehicles.Count == _maxVehicles)
+                throw new ManagerException($"Vehicle limit has been succeeded ({_maxVehicles} vehicles)");
             string[] brands = ["Toyota", "Volvo", "Renault", "MAN"];
             var brandChoice = new Random().Next(0, brands.Length);
             var truck = new Vehicle.Vehicle(brands[brandChoice], _vehicles.Count);
@@ -149,8 +153,8 @@ public class Manager
     {
         lock (_lock)
         {
-            if (_clients.Count == 8)
-                throw new ManagerException("Client limit has been succeeded (8 clients)");
+            if (_clients.Count == _maxClients)
+                throw new ManagerException($"Client limit has been succeeded ({_maxClients} clients)");
             string[] surnames = ["Smith", "Jenkins", "Davis", "Johnson"];
             string[] names = ["John", "Jane", "Sally", "Jack"];
             int getSurname = new Random().Next(0, surnames.Length);
