@@ -205,7 +205,6 @@ namespace TransportationLab2
             mapPictureBox.Size = new Size(825, 800);
             mapPictureBox.TabIndex = 16;
             mapPictureBox.TabStop = false;
-            mapPictureBox.Visible = false;
             // 
             // restockWarehouseButton
             // 

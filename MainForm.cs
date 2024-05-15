@@ -20,6 +20,8 @@ namespace TransportationLab2
                 PictureBox vehiclePBox = new();
                 _manager.CreateVehicle(ref vehiclePBox);
                 Controls.Add(vehiclePBox);
+                vehiclePBox.BringToFront();
+                // Swap(vehiclePBox, mapPictureBox);
             }
             catch (Controller.ManagerException ex)
             {
