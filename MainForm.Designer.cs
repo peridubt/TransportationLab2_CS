@@ -45,14 +45,17 @@ namespace TransportationLab2
             mskPictureBox = new PictureBox();
             viewWarehouseButton = new Button();
             createOrderButton = new Button();
-            mapPictureBox = new PictureBox();
             restockWarehouseButton = new Button();
+            label1 = new Label();
+            label2 = new Label();
+            label3 = new Label();
+            label4 = new Label();
+            label5 = new Label();
             ((System.ComponentModel.ISupportInitialize)spbPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)kznPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)smrPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)vlgPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)mskPictureBox).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)mapPictureBox).BeginInit();
             SuspendLayout();
             // 
             // addClientButton
@@ -80,6 +83,7 @@ namespace TransportationLab2
             // vehiclesLabel
             // 
             vehiclesLabel.AutoSize = true;
+            vehiclesLabel.BackColor = Color.Transparent;
             vehiclesLabel.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
             vehiclesLabel.Location = new Point(1, 178);
             vehiclesLabel.Name = "vehiclesLabel";
@@ -90,6 +94,7 @@ namespace TransportationLab2
             // clientsLabel
             // 
             clientsLabel.AutoSize = true;
+            clientsLabel.BackColor = Color.Transparent;
             clientsLabel.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
             clientsLabel.Location = new Point(1, 616);
             clientsLabel.Name = "clientsLabel";
@@ -120,7 +125,7 @@ namespace TransportationLab2
             spbPictureBox.BackColor = Color.Transparent;
             spbPictureBox.BackgroundImageLayout = ImageLayout.None;
             spbPictureBox.Image = (Image)resources.GetObject("spbPictureBox.Image");
-            spbPictureBox.Location = new Point(338, 109);
+            spbPictureBox.Location = new Point(360, 163);
             spbPictureBox.Name = "spbPictureBox";
             spbPictureBox.Size = new Size(39, 62);
             spbPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -132,7 +137,7 @@ namespace TransportationLab2
             kznPictureBox.BackColor = Color.Transparent;
             kznPictureBox.BackgroundImageLayout = ImageLayout.None;
             kznPictureBox.Image = (Image)resources.GetObject("kznPictureBox.Image");
-            kznPictureBox.Location = new Point(910, 354);
+            kznPictureBox.Location = new Point(929, 408);
             kznPictureBox.Name = "kznPictureBox";
             kznPictureBox.Size = new Size(39, 62);
             kznPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -144,7 +149,7 @@ namespace TransportationLab2
             smrPictureBox.BackColor = Color.Transparent;
             smrPictureBox.BackgroundImageLayout = ImageLayout.None;
             smrPictureBox.Image = (Image)resources.GetObject("smrPictureBox.Image");
-            smrPictureBox.Location = new Point(971, 511);
+            smrPictureBox.Location = new Point(988, 551);
             smrPictureBox.Name = "smrPictureBox";
             smrPictureBox.Size = new Size(39, 62);
             smrPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -156,7 +161,7 @@ namespace TransportationLab2
             vlgPictureBox.BackColor = Color.Transparent;
             vlgPictureBox.BackgroundImageLayout = ImageLayout.None;
             vlgPictureBox.Image = (Image)resources.GetObject("vlgPictureBox.Image");
-            vlgPictureBox.Location = new Point(797, 798);
+            vlgPictureBox.Location = new Point(811, 837);
             vlgPictureBox.Name = "vlgPictureBox";
             vlgPictureBox.Size = new Size(39, 62);
             vlgPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -168,7 +173,7 @@ namespace TransportationLab2
             mskPictureBox.BackColor = Color.Transparent;
             mskPictureBox.BackgroundImageLayout = ImageLayout.None;
             mskPictureBox.Image = (Image)resources.GetObject("mskPictureBox.Image");
-            mskPictureBox.Location = new Point(525, 380);
+            mskPictureBox.Location = new Point(544, 426);
             mskPictureBox.Name = "mskPictureBox";
             mskPictureBox.Size = new Size(39, 62);
             mskPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -178,7 +183,7 @@ namespace TransportationLab2
             // viewWarehouseButton
             // 
             viewWarehouseButton.Font = new Font("Segoe UI", 13.8F);
-            viewWarehouseButton.Location = new Point(254, 13);
+            viewWarehouseButton.Location = new Point(279, 62);
             viewWarehouseButton.Name = "viewWarehouseButton";
             viewWarehouseButton.Size = new Size(215, 78);
             viewWarehouseButton.TabIndex = 14;
@@ -189,7 +194,7 @@ namespace TransportationLab2
             // createOrderButton
             // 
             createOrderButton.Font = new Font("Segoe UI", 13.8F);
-            createOrderButton.Location = new Point(855, 13);
+            createOrderButton.Location = new Point(855, 62);
             createOrderButton.Name = "createOrderButton";
             createOrderButton.Size = new Size(215, 78);
             createOrderButton.TabIndex = 15;
@@ -197,31 +202,78 @@ namespace TransportationLab2
             createOrderButton.UseVisualStyleBackColor = true;
             createOrderButton.Click += CreateOrderButton_Click;
             // 
-            // mapPictureBox
-            // 
-            mapPictureBox.Image = (Image)resources.GetObject("mapPictureBox.Image");
-            mapPictureBox.Location = new Point(254, 109);
-            mapPictureBox.Name = "mapPictureBox";
-            mapPictureBox.Size = new Size(825, 800);
-            mapPictureBox.TabIndex = 16;
-            mapPictureBox.TabStop = false;
-            // 
             // restockWarehouseButton
             // 
             restockWarehouseButton.Font = new Font("Segoe UI", 13.8F);
-            restockWarehouseButton.Location = new Point(500, 13);
+            restockWarehouseButton.Location = new Point(511, 62);
             restockWarehouseButton.Name = "restockWarehouseButton";
-            restockWarehouseButton.Size = new Size(215, 78);
+            restockWarehouseButton.Size = new Size(252, 78);
             restockWarehouseButton.TabIndex = 17;
             restockWarehouseButton.Text = "Restock warehouse";
             restockWarehouseButton.UseVisualStyleBackColor = true;
             restockWarehouseButton.Click += RestockWarehouseButton_Click;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.BackColor = Color.Transparent;
+            label1.Location = new Point(340, 228);
+            label1.Name = "label1";
+            label1.Size = new Size(155, 28);
+            label1.TabIndex = 18;
+            label1.Text = "Saint Petersburg";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.BackColor = Color.Transparent;
+            label2.Location = new Point(528, 395);
+            label2.Name = "label2";
+            label2.Size = new Size(85, 28);
+            label2.TabIndex = 19;
+            label2.Text = "Moscow";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.BackColor = Color.Transparent;
+            label3.Location = new Point(918, 377);
+            label3.Name = "label3";
+            label3.Size = new Size(64, 28);
+            label3.TabIndex = 20;
+            label3.Text = "Kazan";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.BackColor = Color.Transparent;
+            label4.Location = new Point(970, 520);
+            label4.Name = "label4";
+            label4.Size = new Size(77, 28);
+            label4.TabIndex = 21;
+            label4.Text = "Samara";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.BackColor = Color.Transparent;
+            label5.Location = new Point(785, 806);
+            label5.Name = "label5";
+            label5.Size = new Size(105, 28);
+            label5.TabIndex = 22;
+            label5.Text = "Volgograd";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(11F, 28F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             ClientSize = new Size(1082, 911);
+            Controls.Add(label5);
+            Controls.Add(label4);
+            Controls.Add(label3);
+            Controls.Add(label2);
+            Controls.Add(label1);
             Controls.Add(restockWarehouseButton);
             Controls.Add(createOrderButton);
             Controls.Add(viewWarehouseButton);
@@ -236,7 +288,6 @@ namespace TransportationLab2
             Controls.Add(vehiclesLabel);
             Controls.Add(addVehicleButton);
             Controls.Add(addClientButton);
-            Controls.Add(mapPictureBox);
             Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4);
@@ -248,7 +299,6 @@ namespace TransportationLab2
             ((System.ComponentModel.ISupportInitialize)smrPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)vlgPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)mskPictureBox).EndInit();
-            ((System.ComponentModel.ISupportInitialize)mapPictureBox).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -267,7 +317,11 @@ namespace TransportationLab2
         private PictureBox mskPictureBox;
         private Button viewWarehouseButton;
         private Button createOrderButton;
-        private PictureBox mapPictureBox;
         private Button restockWarehouseButton;
+        private Label label1;
+        private Label label2;
+        private Label label3;
+        private Label label4;
+        private Label label5;
     }
 }
