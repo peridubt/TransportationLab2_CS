@@ -97,23 +97,23 @@ namespace TransportationLab2
             clientsLabel.TabIndex = 5;
             clientsLabel.Text = "Available clients:";
             // 
-            // vehiclesListView
+            // vehiclesView
             // 
+            vehiclesView.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 204);
             vehiclesView.Location = new Point(1, 219);
             vehiclesView.Name = "vehiclesView";
             vehiclesView.Size = new Size(215, 230);
             vehiclesView.TabIndex = 6;
             vehiclesView.UseCompatibleStateImageBehavior = false;
-            vehiclesView.Font =  new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 204);
             // 
-            // clientsListView
+            // clientsView
             // 
+            clientsView.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 204);
             clientsView.Location = new Point(1, 657);
             clientsView.Name = "clientsView";
             clientsView.Size = new Size(215, 230);
             clientsView.TabIndex = 7;
             clientsView.UseCompatibleStateImageBehavior = false;
-            clientsView.Font =  new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 204);
             // 
             // spbPictureBox
             // 
@@ -238,12 +238,12 @@ namespace TransportationLab2
             Controls.Add(addVehicleButton);
             Controls.Add(addClientButton);
             Controls.Add(mapPictureBox);
-            Load += MainForm_Load;
             Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4);
             MaximizeBox = false;
             Name = "MainForm";
+            Load += MainForm_Load;
             ((System.ComponentModel.ISupportInitialize)spbPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)kznPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)smrPictureBox).EndInit();

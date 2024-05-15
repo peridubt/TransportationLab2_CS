@@ -19,7 +19,6 @@ namespace TransportationLab2
             {
                 PictureBox vehiclePBox = new();
                 _manager.CreateVehicle(ref vehiclePBox);
-                mskPictureBox.Parent = vehiclePBox;
                 Controls.Add(vehiclePBox);
             }
             catch (Controller.ManagerException ex)
