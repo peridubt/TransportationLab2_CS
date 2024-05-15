@@ -1,9 +1,10 @@
-﻿using TransportationLab2.Cargo.Factory;
+﻿using System.Text;
+using TransportationLab2.Cargo.Factory;
 using TransportationLab2.Cargo.Unit;
 using TransportationLab2.Client;
 using TransportationLab2.Vehicle;
 
-namespace TransportationLab2.Manager;
+namespace TransportationLab2.Controller;
 
 public class Manager
 {
@@ -15,11 +16,10 @@ public class Manager
     private readonly object _lock = new();
     private ListView vehiclesView;
     private ListView clientsView;
-
+    private Queue<Vehicle.Vehicle> _activeVehicles = new();
     private event Action? NotifyClient; // Event, на который подписывается клиент.
     // При срабатывании данного события клиент получит заказ, а после чего
     // отпишется от уведомлений по заказу.
-
     private void OnNotifyClient()
     {
         NotifyClient?.Invoke();
@@ -31,11 +31,12 @@ public class Manager
     private void AssignOrderToVehicle(int clientChoice)
     {
         int truckChoice = new Random().Next(0, _vehicles.Count);
-        _vehicles[truckChoice].TargetCity = _clients[clientChoice]?.City;
-        _vehicles[truckChoice].Clients?.Enqueue(_clients[clientChoice]);
-        if (!_threads[truckChoice].IsAlive) 
-            _threads[truckChoice].Start();
-        _vehicles[truckChoice].VehicleAvatar.Visible = true;
+        var vehicle = _vehicles[truckChoice];
+        _activeVehicles.Enqueue(vehicle);
+        _vehicles.RemoveAt(truckChoice);
+        vehicle.TargetCity = _clients[clientChoice]?.City;
+        vehicle.Client = _clients[clientChoice];
+        vehicle.VehicleAvatar.Visible = true;
     }
 
     private void CargoInit(ICargoFactory factory)
@@ -51,18 +52,18 @@ public class Manager
     {
         NotifyClient += client.RecieveOrder;
         truck.State = VehicleState.Driving;
-        truck.Clients.Peek().State = ClientState.WaitingForOrder;
+        truck.Client.State = ClientState.WaitingForOrder;
         Animation.Move(truck.TargetCity.Coordinates, ref truck);
     }
 
     private void Offload(Client.Client client, Vehicle.Vehicle truck)
     {
         truck.State = VehicleState.Offloading;
-        truck.Clients.Peek().State = ClientState.RecievingOrder;
+        truck.Client.State = ClientState.RecievingOrder;
         Thread.Sleep(1000);
         OnNotifyClient();
-        truck.Clients.Peek().State = ClientState.Inactive;
-        truck.Clients?.Dequeue();
+        truck.Client.State = ClientState.Inactive;
+        truck.Client = null;
         NotifyClient -= client.RecieveOrder;
     }
 
@@ -75,19 +76,22 @@ public class Manager
 
     private void ProcessOrders(Vehicle.Vehicle truck)
     {
-        // в нём грузовик имеет начальное состояние ожидания
         while (true)
         {
-            while (truck.Clients != null && truck.Clients.Count == 0)
-                Thread.Sleep(10);
+            while (truck.Client == null)
+                Thread.Sleep(100);
             // как только грузовик получил заказ, он начинает своё движение
-            var client = truck.Clients?.Peek();
+            var client = truck.Client;
             if (client != null)
             {
                 var prevPoint = truck.CurrentPos;
                 DriveToClient(client, truck);
                 Offload(client, truck);
                 DriveBack(prevPoint, truck);
+                lock (_lock)
+                {
+                    _vehicles.Add(_activeVehicles.Dequeue());
+                }
             }
         }
     }
@@ -111,10 +115,14 @@ public class Manager
     {
         lock (_lock)
         {
-            CargoInit(new DangerousFactory("Dangerous", new Random().Next(100, 500), _items.Count));
-            CargoInit(new FragileFactory("Fragile", new Random().Next(200, 600), _items.Count));
-            CargoInit(new LiquidFactory("Liquid", new Random().Next(400, 900), _items.Count));
-            CargoInit(new PerishableFactory("Perishable", new Random().Next(300, 900), _items.Count));
+            CargoInit(new DangerousFactory("Dangerous", new Random().Next(100, 500), 0));
+            CargoInit(new FragileFactory("Fragile", new Random().Next(200, 600), 0));
+            CargoInit(new LiquidFactory("Liquid", new Random().Next(400, 900), 0));
+            CargoInit(new PerishableFactory("Perishable", new Random().Next(300, 900), 0));
+            for (int i = 0; i < _items.Count; ++i)
+            {
+                _items[i].Id = i;
+            }
         }
     }
 
@@ -122,6 +130,8 @@ public class Manager
     {
         lock (_lock)
         {
+            if (_vehicles.Count + _activeVehicles.Count == 4)
+                throw new ManagerException("Vehicle limit has been succeeded (4 vehicles)");
             string[] brands = ["Toyota", "Volvo", "Renault", "MAN"];
             var brandChoice = new Random().Next(0, brands.Length);
             var truck = new Vehicle.Vehicle(brands[brandChoice], _vehicles.Count);
@@ -131,6 +141,7 @@ public class Manager
             var thread = new Thread(() => ProcessOrders(truck));
             vehiclesView.Items.Add(truck.CarBrand);
             _threads.Add(thread);
+            _threads.Last().Start();
         }
     }
 
@@ -160,6 +171,8 @@ public class Manager
                 throw new EmptyWarehouseException("Warehouse is empty and needs restock");
             if (_clients.Count == 0)
                 throw new NoClientsException("No clients");
+            if (_vehicles.Count == 0 && _activeVehicles.Count != 0)
+                throw new ManagerException("No avaliable vehicles");
             if (_vehicles.Count == 0)
                 throw new NoVehiclesException("No vehicles");
             int itemChoice = new Random().Next(0, _items.Count);
@@ -168,6 +181,21 @@ public class Manager
             _clients[clientChoice].State = ClientState.WaitingForOrder;
             _items.RemoveAt(itemChoice);
             AssignOrderToVehicle(clientChoice);
+        }
+    }
+
+    public string ViewWarehouse()
+    {
+        lock (_lock)
+        {
+            var result = new StringBuilder();
+            result.AppendLine($"ID  Name                     Type                    Cost   ");
+            foreach (var item in _items)
+            {
+                result.AppendLine($"{item.Id,-4}\"{item.Name,-20}\"" +
+                    $"{item.Type.ToString(),-20}{item.Cost,-5}");
+            }
+            return result.ToString();
         }
     }
 }

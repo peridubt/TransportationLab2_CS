@@ -1,7 +1,4 @@
-﻿using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
-
-namespace TransportationLab2.Manager;
+﻿namespace TransportationLab2.Controller;
 
 public static class Animation
 {

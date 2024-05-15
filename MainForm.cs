@@ -2,7 +2,7 @@ namespace TransportationLab2
 {
     public partial class MainForm : Form
     {
-        private Manager.Manager _manager;
+        private Controller.Manager _manager;
         public MainForm()
         {
             InitializeComponent();
@@ -17,11 +17,12 @@ namespace TransportationLab2
         {
             try
             {
-                PictureBox vehcilePBox = new();
-                _manager.CreateVehicle(ref vehcilePBox);
-                Controls.Add(vehcilePBox);
+                PictureBox vehiclePBox = new();
+                _manager.CreateVehicle(ref vehiclePBox);
+                mskPictureBox.Parent = vehiclePBox;
+                Controls.Add(vehiclePBox);
             }
-            catch (ManagerException ex)
+            catch (Controller.ManagerException ex)
             {
                 MessageBox.Show(ex.Message, "Error!",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -34,7 +35,7 @@ namespace TransportationLab2
             {
                 _manager.CreateClient();
             }
-            catch (ManagerException ex)
+            catch (Controller.ManagerException ex)
             {
                 MessageBox.Show(ex.Message, "Error!",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -47,7 +48,7 @@ namespace TransportationLab2
             {
                 _manager.CreateOrder();
             }
-            catch (ManagerException ex)
+            catch (Controller.ManagerException ex)
             {
                 MessageBox.Show(ex.Message, "Error!",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -56,32 +57,9 @@ namespace TransportationLab2
 
         private void ViewWarehouseButton_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void MskPictureBox_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void SpbPictureBox_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void KznPictureBox_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void SmrPictureBox_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void VlgPictureBox_Click(object sender, EventArgs e)
-        {
-
+            var warehouseWindow = new WarehouseVisual();
+            warehouseWindow.warehouseTextBox.Text = _manager.ViewWarehouse();
+            warehouseWindow.Show();
         }
 
         private void RestockWarehouseButton_Click(object sender, EventArgs e)

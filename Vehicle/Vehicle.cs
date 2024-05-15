@@ -3,7 +3,7 @@
 public class Vehicle
 {
  
-    public Queue<Client.Client?>? Clients { get; } = new();
+    public Client.Client? Client { get; set; }
     public  string CarBrand { get; }
     public int Id { get; }
     public City.City? TargetCity { get; set; } = new();

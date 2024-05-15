@@ -126,7 +126,6 @@ namespace TransportationLab2
             spbPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
             spbPictureBox.TabIndex = 9;
             spbPictureBox.TabStop = false;
-            spbPictureBox.Click += SpbPictureBox_Click;
             // 
             // kznPictureBox
             // 
@@ -139,7 +138,6 @@ namespace TransportationLab2
             kznPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
             kznPictureBox.TabIndex = 10;
             kznPictureBox.TabStop = false;
-            kznPictureBox.Click += KznPictureBox_Click;
             // 
             // smrPictureBox
             // 
@@ -152,7 +150,6 @@ namespace TransportationLab2
             smrPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
             smrPictureBox.TabIndex = 11;
             smrPictureBox.TabStop = false;
-            smrPictureBox.Click += SmrPictureBox_Click;
             // 
             // vlgPictureBox
             // 
@@ -165,7 +162,6 @@ namespace TransportationLab2
             vlgPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
             vlgPictureBox.TabIndex = 12;
             vlgPictureBox.TabStop = false;
-            vlgPictureBox.Click += VlgPictureBox_Click;
             // 
             // mskPictureBox
             // 
@@ -178,7 +174,6 @@ namespace TransportationLab2
             mskPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
             mskPictureBox.TabIndex = 13;
             mskPictureBox.TabStop = false;
-            mskPictureBox.Click += MskPictureBox_Click;
             // 
             // viewWarehouseButton
             // 

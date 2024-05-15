@@ -1,4 +1,4 @@
-﻿namespace TransportationLab2;
+﻿namespace TransportationLab2.Controller;
 
 public class ManagerException: Exception
 {
