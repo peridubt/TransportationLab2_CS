@@ -30,6 +30,7 @@
         {
             clientsCityListBox = new ListBox();
             cityLabel = new Label();
+            vehiclesCityListBox = new ListBox();
             SuspendLayout();
             // 
             // clientsCityListBox
@@ -37,7 +38,7 @@
             clientsCityListBox.FormattingEnabled = true;
             clientsCityListBox.Location = new Point(20, 96);
             clientsCityListBox.Name = "clientsCityListBox";
-            clientsCityListBox.Size = new Size(355, 324);
+            clientsCityListBox.Size = new Size(233, 324);
             clientsCityListBox.TabIndex = 1;
             // 
             // cityLabel
@@ -50,11 +51,20 @@
             cityLabel.TabIndex = 2;
             cityLabel.Text = "Clients in ";
             // 
+            // vehiclesCityListBox
+            // 
+            vehiclesCityListBox.FormattingEnabled = true;
+            vehiclesCityListBox.Location = new Point(308, 96);
+            vehiclesCityListBox.Name = "vehiclesCityListBox";
+            vehiclesCityListBox.Size = new Size(233, 324);
+            vehiclesCityListBox.TabIndex = 3;
+            // 
             // CityVisual
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(396, 450);
+            ClientSize = new Size(561, 450);
+            Controls.Add(vehiclesCityListBox);
             Controls.Add(cityLabel);
             Controls.Add(clientsCityListBox);
             Name = "CityVisual";
@@ -66,5 +76,6 @@
         #endregion
         public ListBox clientsCityListBox;
         public Label cityLabel;
+        public ListBox vehiclesCityListBox;
     }
 }

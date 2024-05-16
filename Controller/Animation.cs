@@ -40,7 +40,7 @@ public static class Animation
     {
         if (truck.TargetCity != null)
         {
-            int count = truck.TargetCity.RoadLength / 10;
+            int count = truck.TargetCity.RoadLength / 20;
             var points = GetCoordsBetween(truck.CurrentPos, end, count);
             foreach (var point in points)
             {

@@ -11,6 +11,7 @@ namespace TransportationLab2
         public void MainForm_Load(object sender, EventArgs e)
         {
             _manager = new(ref clientsView, ref vehiclesView);
+            CenterToScreen();
         }
 
         private void AddVehicleButton_Click(object sender, EventArgs e)
@@ -67,13 +68,30 @@ namespace TransportationLab2
             _manager.RestockWarehouse();
         }
 
-        private void AddClientsToView(CityVisual window)
+        private void AddElementsToView(CityVisual window)
         {
-            var clients = _manager.Clients;
-            foreach (var client in clients) 
+            if (window.CityName != "Moscow")
             {
-                if (client.City.ToString() == window.CityName)
-                    window.clientsCityListBox.Items.Add(client.ToString());
+                var clients = _manager.Clients;
+                foreach (var client in clients)
+                {
+                    if (client.City.ToString() == window.CityName)
+                        window.clientsCityListBox.Items.Add(client.ToString());
+                }
+                var activeVehicles = _manager.ActiveVehicles;
+                foreach (var vehicle in activeVehicles)
+                {
+                    if (vehicle.TargetCity.ToString() == window.CityName)
+                        window.vehiclesCityListBox.Items.Add(vehicle.ViewInfo());
+                }
+                return;
+            }
+            window.clientsCityListBox.Visible = false;
+            window.vehiclesCityListBox.Location = window.clientsCityListBox.Location;
+            var vehicles = _manager.Vehicles;
+            foreach (var vehicle in vehicles)
+            {
+                window.vehiclesCityListBox.Items.Add(vehicle.ViewInfo());
             }
         }
 
@@ -82,7 +100,7 @@ namespace TransportationLab2
             var window = new CityVisual();
             window.CityName = "Saint Petersburg";
             window.cityLabel.Text += window.CityName;
-            AddClientsToView(window);
+            AddElementsToView(window);
             window.Show();
         }
 
@@ -91,7 +109,7 @@ namespace TransportationLab2
             var window = new CityVisual();
             window.CityName = "Kazan";
             window.cityLabel.Text += window.CityName;
-            AddClientsToView(window);
+            AddElementsToView(window);
             window.Show();
         }
 
@@ -100,7 +118,7 @@ namespace TransportationLab2
             var window = new CityVisual();
             window.CityName = "Samara";
             window.cityLabel.Text += window.CityName;
-            AddClientsToView(window);
+            AddElementsToView(window);
             window.Show();
         }
 
@@ -109,7 +127,16 @@ namespace TransportationLab2
             var window = new CityVisual();
             window.CityName = "Volgograd";
             window.cityLabel.Text += window.CityName;
-            AddClientsToView(window);
+            AddElementsToView(window);
+            window.Show();
+        }
+
+        private void MskLabel_Click(object sender, EventArgs e)
+        {
+            var window = new CityVisual();
+            window.CityName = "Moscow";
+            window.cityLabel.Text = "Current base";
+            AddElementsToView(window);
             window.Show();
         }
     }

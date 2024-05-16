@@ -24,6 +24,8 @@ public class Manager
     // отпишется от уведомлений по заказу.
 
     public List<Client.Client> Clients { get=>_clients; }
+    public List<Vehicle.Vehicle> Vehicles { get => _vehicles; } 
+    public Queue<Vehicle.Vehicle> ActiveVehicles { get => _activeVehicles; }
     private void OnNotifyClient()
     {
         NotifyClient?.Invoke();
@@ -36,8 +38,10 @@ public class Manager
     {
         int truckChoice = new Random().Next(0, _vehicles.Count);
         var vehicle = _vehicles[truckChoice];
+
         _activeVehicles.Enqueue(vehicle);
         _vehicles.RemoveAt(truckChoice);
+
         vehicle.TargetCity = _clients[clientChoice]?.City;
         vehicle.Client = _clients[clientChoice];
         vehicle.VehicleAvatar.Visible = true;
@@ -64,7 +68,7 @@ public class Manager
     {
         truck.State = VehicleState.Offloading;
         truck.Client.State = ClientState.RecievingOrder;
-        Thread.Sleep(1000);
+        Thread.Sleep(5000);
         OnNotifyClient();
         truck.Client.State = ClientState.Inactive;
         truck.Client = null;
@@ -73,6 +77,7 @@ public class Manager
 
     private void DriveBack(Point prevPoint, Vehicle.Vehicle truck)
     {
+        truck.State = VehicleState.Driving;
         Animation.Move(prevPoint, ref truck);
         truck.State = VehicleState.Waiting;
         truck.VehicleAvatar.Visible = false;
@@ -139,11 +144,14 @@ public class Manager
             string[] brands = ["Toyota", "Volvo", "Renault", "MAN"];
             var brandChoice = new Random().Next(0, brands.Length);
             var truck = new Vehicle.Vehicle(brands[brandChoice], _vehicles.Count);
+
             Animation.CreateVehicleImage(ref truck);
             vehcilePBox = truck.VehicleAvatar;
+
             _vehicles.Add(truck);
+            vehiclesView.Items.Add(truck.ToString());
+
             var thread = new Thread(() => ProcessOrders(truck));
-            vehiclesView.Items.Add(truck.CarBrand);
             _threads.Add(thread);
             _threads.Last().Start();
         }
@@ -157,12 +165,15 @@ public class Manager
                 throw new ManagerException($"Client limit has been succeeded ({_maxClients} clients)");
             string[] surnames = ["Smith", "Jenkins", "Davis", "Johnson"];
             string[] names = ["John", "Jane", "Sally", "Jack"];
+
             int getSurname = new Random().Next(0, surnames.Length);
             int getName = new Random().Next(0, names.Length);
             int getCity = new Random().Next(0, _cities.Count);
+
             _clients.Add(new Client.Client(names[getName],
                 surnames[getSurname],
                 _cities[getCity]));
+
             clientsView.Items.Add(names[getName] + " " + surnames[getSurname]);
         }
     }
@@ -179,10 +190,13 @@ public class Manager
                 throw new ManagerException("No avaliable vehicles");
             if (_vehicles.Count == 0)
                 throw new NoVehiclesException("No vehicles");
+
             int itemChoice = new Random().Next(0, _items.Count);
             int clientChoice = new Random().Next(0, _clients.Count);
+
             _clients[clientChoice].Order = _items[itemChoice];
             _clients[clientChoice].State = ClientState.WaitingForOrder;
+
             _items.RemoveAt(itemChoice);
             AssignOrderToVehicle(clientChoice);
         }

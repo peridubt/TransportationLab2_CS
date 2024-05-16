@@ -104,7 +104,7 @@ namespace TransportationLab2
             // 
             // vehiclesView
             // 
-            vehiclesView.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            vehiclesView.Font = new Font("Segoe UI", 7F);
             vehiclesView.Location = new Point(1, 219);
             vehiclesView.Name = "vehiclesView";
             vehiclesView.Size = new Size(215, 230);
@@ -229,11 +229,13 @@ namespace TransportationLab2
             // 
             mskLabel.AutoSize = true;
             mskLabel.BackColor = Color.Transparent;
+            mskLabel.Cursor = Cursors.Hand;
             mskLabel.Location = new Point(528, 395);
             mskLabel.Name = "mskLabel";
             mskLabel.Size = new Size(85, 28);
             mskLabel.TabIndex = 19;
             mskLabel.Text = "Moscow";
+            mskLabel.Click += MskLabel_Click;
             // 
             // kaznLabel
             // 
