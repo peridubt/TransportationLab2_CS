@@ -1,4 +1,7 @@
-﻿namespace TransportationLab2.Controller;
+﻿using System.Reflection;
+using TransportationLab2.Properties;
+
+namespace TransportationLab2.Controller;
 
 public static class Animation
 {
@@ -25,22 +28,21 @@ public static class Animation
 
     public static void CreateVehicleImage(ref Vehicle.Vehicle vehicle)
     {
-        vehicle.VehicleAvatar.Image = Image.FromFile("C:\\Users\\honor\\Desktop\\Лабы\\CSharp\\" +
-            "TransportationLab2\\Resources\\truck.png");
+        string imageDirectory ="..\\..\\..\\Resources\\truck.png";
+        vehicle.VehicleAvatar.Image = Image.FromFile(imageDirectory);
         vehicle.VehicleAvatar.Visible = false;
         vehicle.VehicleAvatar.Location = new Point(544, 426);
         vehicle.CurrentPos = vehicle.VehicleAvatar.Location;
         vehicle.VehicleAvatar.Size = new Size(100, 50);
         vehicle.VehicleAvatar.SizeMode = PictureBoxSizeMode.StretchImage;
         vehicle.VehicleAvatar.TabStop = false;
-        vehicle.VehicleAvatar.BackColor = Color.Transparent;
     }
 
     public static void Move(Point end, ref Vehicle.Vehicle truck)
     {
         if (truck.TargetCity != null)
         {
-            int count = truck.TargetCity.RoadLength / 20;
+            int count = truck.TargetCity.RoadLength / 15;
             var points = GetCoordsBetween(truck.CurrentPos, end, count);
             foreach (var point in points)
             {
