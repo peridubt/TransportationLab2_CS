@@ -8,45 +8,44 @@ namespace TransportationLab2.Controller;
 
 public class Manager
 {
-    private const int _maxClients = 10;
-    private const int _maxVehicles = 5;
-    private readonly List<Client.Client?> _clients = new();
-    private readonly List<Vehicle.Vehicle> _vehicles = new();
-    private readonly List<City.City?> _cities;
-    private readonly List<ICargo> _items = new();
-    private readonly List<Thread> _threads = new();
-    private readonly object _lock = new();
-    private ListView vehiclesView;
-    private ListView clientsView;
-    private Queue<Vehicle.Vehicle> _activeVehicles = new();
-    private event Action? NotifyClient; // Event, на который подписывается клиент.
+    private const int _maxClients = 10; // Максимальное количество клиентов 
+    private const int _maxVehicles = 5; // Макс. кол-во машин
+    private readonly List<Client.Client?> _clients = new(); // Список клиентов
+    private readonly List<Vehicle.Vehicle> _vehicles = new(); // Список машин
+    private readonly List<City.City?> _cities; // Список городов
+    private readonly List<ICargo> _items = new(); // Склад
+    private readonly List<Thread> _threads = new(); // Потоки, которые выполняют логику работы машин
+    private readonly object _lock = new(); // Объект для синхронизации потоков (для lock() )
+    private ListView vehiclesView; // Вывод машин в основную форму
+    private ListView clientsView; // Вывод клиентов в основную форму
+    private Queue<Vehicle.Vehicle> _activeVehicles = new(); // очередь грузовиков, находящихся в пути
+    private event Action? NotifyClient; // Event, на который подписывается клиент. (Вот и шаблон "Наблюдатель")
     // При срабатывании данного события клиент получит заказ, а после чего
-    // отпишется от уведомлений по заказу.
+    // он отпишется от уведомлений по заказу.
 
     public List<Client.Client> Clients { get=>_clients; }
     public List<Vehicle.Vehicle> Vehicles { get => _vehicles; } 
-    public Queue<Vehicle.Vehicle> ActiveVehicles { get => _activeVehicles; }
+    public Queue<Vehicle.Vehicle> ActiveVehicles { get => _activeVehicles; } 
     private void OnNotifyClient()
     {
         NotifyClient?.Invoke();
     }
 
-    // TODO: организовать потоки до конца (возможно, пул потоков)
-    // TODO: сделать графическую часть, протестировать
-
-    private void AssignOrderToVehicle(int clientChoice)
+    // Выдача случайного заказа случайному грузовику
+    private void AssignOrderToVehicle(int clientChoice) 
     {
         int truckChoice = new Random().Next(0, _vehicles.Count);
-        var vehicle = _vehicles[truckChoice];
+        var vehicle = _vehicles[truckChoice]; // Выбираем рандомно грузовик
 
-        _activeVehicles.Enqueue(vehicle);
-        _vehicles.RemoveAt(truckChoice);
+        _activeVehicles.Enqueue(vehicle); // Ставим его в очередь активных
+        _vehicles.RemoveAt(truckChoice); // Убираем из списка тех, кто находится на базе
 
-        vehicle.TargetCity = _clients[clientChoice]?.City;
-        vehicle.Client = _clients[clientChoice];
-        vehicle.VehicleAvatar.Visible = true;
+        vehicle.TargetCity = _clients[clientChoice]?.City; // Назначаем грузовику город
+        vehicle.Client = _clients[clientChoice]; // Назначаем грузовику клиента, которому выдаётся заказ
+        vehicle.VehicleAvatar.Visible = true; // Делаем изображение грузовика видимым для пользователя
     }
 
+    // Инициализация отдельного типа груза через фабрику
     private void CargoInit(ICargoFactory factory)
     {
         int range = new Random().Next(0, 5);
@@ -56,25 +55,34 @@ public class Manager
         }
     }
 
+    // Метод передвижения грузовика от базы в город клиента
     private void DriveToClient(Client.Client client, Vehicle.Vehicle truck)
     {
-        NotifyClient += client.RecieveOrder;
-        truck.State = VehicleState.Driving;
-        truck.Client.State = ClientState.WaitingForOrder;
-        Animation.Move(truck.TargetCity.Coordinates, ref truck);
+        NotifyClient += client.RecieveOrder; // Клиент подписывается на событие, которое 
+        truck.State = VehicleState.Driving; // Состояние грузовика меняется на "В пути"
+        truck.Client.State = ClientState.WaitingForOrder; // Состояние клиента - ожидание
+        Animation.Move(truck.TargetCity.Coordinates, ref truck); // Вызывается метод, который перемещает
+        // PictureBox грузовика из начальной точки в указанную
     }
 
-    private void Offload(Client.Client client, Vehicle.Vehicle truck)
+    // Выгрузка товара
+    private void Offload(Client.Client client, Vehicle.Vehicle truck) 
     {
+        // Меняем состояния для клиена и грузовика
         truck.State = VehicleState.Offloading;
         truck.Client.State = ClientState.RecievingOrder;
+        // Ставим время для выгрузки - 5 с
         Thread.Sleep(5000);
+        // Уведомляем клиента о доставке грузка
         OnNotifyClient();
+        // Клиент теперь неактивен, а грузовик не имеет текущего заказа
         truck.Client.State = ClientState.Inactive;
         truck.Client = null;
+        // Отписываем клиента от уведомлений
         NotifyClient -= client.RecieveOrder;
     }
-
+ 
+    // Метод передвижения грузовика в стартовую позицию
     private void DriveBack(Point prevPoint, Vehicle.Vehicle truck)
     {
         truck.State = VehicleState.Driving;
@@ -83,13 +91,16 @@ public class Manager
         truck.VehicleAvatar.Visible = false;
     }
 
+    // Метод, который делегирует заказом, который назначен одному грузовику
     private void ProcessOrders(Vehicle.Vehicle truck)
     {
-        while (true)
+        while (true) // Начинается бесконечный цикл
         {
             while (truck.Client == null)
-                Thread.Sleep(100);
-            // как только грузовик получил заказ, он начинает своё движение
+                // Каждые 100 мс происходит запрос: не получил ли грузовик новый заказ 
+                Thread.Sleep(100); 
+            
+            // Как только грузовик получил заказ, он начинает своё движение
             var client = truck.Client;
             if (client != null)
             {
@@ -99,6 +110,8 @@ public class Manager
                 DriveBack(prevPoint, truck);
                 lock (_lock)
                 {
+                    // После завершения заказа грузовик выходит из очереди активных машин
+                    // И возвращается в общий список грузовиков
                     _vehicles.Add(_activeVehicles.Dequeue());
                 }
             }
@@ -107,8 +120,11 @@ public class Manager
 
     public Manager(ref ListView clientsView, ref ListView vehiclesView)
     {
+        // В начале менеджеру назначаем отображение клиентов и грузовиков
         this.vehiclesView = vehiclesView;
         this.clientsView = clientsView;
+        
+        // Создаём города
         _cities =
             new List<City.City?>
             {
@@ -117,12 +133,15 @@ public class Manager
                 new("Kazan", 819, new(929, 408)),
                 new("Samara", 968, new(998, 551))
             };
+        
+        // Наполняем склад
         RestockWarehouse();
     }
 
+    // Метод наполнения склада различными грузами
     public void RestockWarehouse()
     {
-        lock (_lock)
+        lock (_lock) // Синхронизация потоков (т.к. склад - это общий ресурс, который задействуется потоками)
         {
             CargoInit(new DangerousFactory("Dangerous", new Random().Next(100, 500), 0));
             CargoInit(new FragileFactory("Fragile", new Random().Next(200, 600), 0));
@@ -135,28 +154,32 @@ public class Manager
         }
     }
 
+    // Метод создания одного клиента
     public void CreateVehicle(ref PictureBox vehcilePBox)
     {
-        lock (_lock)
+        lock (_lock) // Синхронизация (общий ресурс - список грузовиков)
         {
             if (_vehicles.Count + _activeVehicles.Count == _maxVehicles)
                 throw new ManagerException($"Vehicle limit has been succeeded ({_maxVehicles} vehicles)");
             string[] brands = ["Toyota", "Volvo", "Renault", "MAN"];
-            var brandChoice = new Random().Next(0, brands.Length);
+            var brandChoice = new Random().Next(0, brands.Length); // Задаём случайную марку автомобиля
             var truck = new Vehicle.Vehicle(brands[brandChoice], _vehicles.Count);
 
-            Animation.CreateVehicleImage(ref truck);
-            vehcilePBox = truck.VehicleAvatar;
+            Animation.CreateVehicleImage(ref truck); // Создаём картинку для грузовика
+            vehcilePBox = truck.VehicleAvatar; // Для внешней программы задаём PictureBox
 
-            _vehicles.Add(truck);
-            vehiclesView.Items.Add(truck.ToString());
+            _vehicles.Add(truck); // Добавляем грузовик в общий список
+            vehiclesView.Items.Add(truck.ViewInfo()); // Отображаем грузовик во внешней программе
 
-            var thread = new Thread(() => ProcessOrders(truck));
+            // Создаём новый поток и добавляем его в список
+            var thread = new Thread(() => ProcessOrders(truck)); 
             _threads.Add(thread);
-            _threads.Last().Start();
+            // Сразу же запускаем его, т.к. процесс грузовика - это бесконечный цикл
+            _threads.Last().Start(); 
         }
     }
 
+    // Метод создания клиента
     public void CreateClient()
     {
         lock (_lock)
@@ -178,6 +201,7 @@ public class Manager
         }
     }
 
+    // Метод создания заказа
     public void CreateOrder()
     {
         lock (_lock)
@@ -187,21 +211,25 @@ public class Manager
             if (_clients.Count == 0)
                 throw new NoClientsException("No clients");
             if (_vehicles.Count == 0 && _activeVehicles.Count != 0)
-                throw new ManagerException("No avaliable vehicles");
+                throw new ManagerException("No available vehicles");
             if (_vehicles.Count == 0)
                 throw new NoVehiclesException("No vehicles");
 
+            // Выбираем случайный предмет со склада и случайного клиента
             int itemChoice = new Random().Next(0, _items.Count);
             int clientChoice = new Random().Next(0, _clients.Count);
 
+            // Назначаем заказ клиенту и ставим его в ожидание
             _clients[clientChoice].Order = _items[itemChoice];
             _clients[clientChoice].State = ClientState.WaitingForOrder;
 
+            // Предмет убирается со склада
             _items.RemoveAt(itemChoice);
-            AssignOrderToVehicle(clientChoice);
+            AssignOrderToVehicle(clientChoice); // Начинается разначение заказа грузовику
         }
     }
 
+    // Вывод информации о складе
     public string ViewWarehouse()
     {
         lock (_lock)

@@ -1,11 +1,29 @@
+using TransportationLab2.Controller;
+
 namespace TransportationLab2
 {
     public partial class MainForm : Form
     {
-        private Controller.Manager _manager;
+        private Manager _manager;
+
         public MainForm()
         {
             InitializeComponent();
+        }
+
+        private void ShowError(ManagerException ex)
+        {
+            MessageBox.Show(ex.Message, "Error!",
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        private void ShowCity(string city)
+        {
+            var window = new CityVisual();
+            window.CityName = city;
+            window.cityLabel.Text += window.CityName;
+            AddElementsToView(window);
+            window.Show();
         }
 
         public void MainForm_Load(object sender, EventArgs e)
@@ -23,10 +41,9 @@ namespace TransportationLab2
                 Controls.Add(vehiclePBox);
                 vehiclePBox.BringToFront();
             }
-            catch (Controller.ManagerException ex)
+            catch (ManagerException ex)
             {
-                MessageBox.Show(ex.Message, "Error!",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowError(ex);
             }
         }
 
@@ -36,10 +53,9 @@ namespace TransportationLab2
             {
                 _manager.CreateClient();
             }
-            catch (Controller.ManagerException ex)
+            catch (ManagerException ex)
             {
-                MessageBox.Show(ex.Message, "Error!",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowError(ex);
             }
         }
 
@@ -49,10 +65,9 @@ namespace TransportationLab2
             {
                 _manager.CreateOrder();
             }
-            catch (Controller.ManagerException ex)
+            catch (ManagerException ex)
             {
-                MessageBox.Show(ex.Message, "Error!",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowError(ex);
             }
         }
 
@@ -73,71 +88,54 @@ namespace TransportationLab2
             if (window.CityName != "Moscow")
             {
                 var clients = _manager.Clients;
-                foreach (var client in clients)
+                foreach (var client in clients.Where(client =>
+                             client.City.ToString() == window.CityName))
                 {
-                    if (client.City.ToString() == window.CityName)
-                        window.clientsCityListBox.Items.Add(client.ToString());
+                    window.clientsCityListBox.Items.Add(client.ToString());
                 }
+
                 var activeVehicles = _manager.ActiveVehicles;
-                foreach (var vehicle in activeVehicles)
+                foreach (var vehicle in activeVehicles.Where(vehicle =>
+                             vehicle.TargetCity.ToString() == window.CityName))
                 {
-                    if (vehicle.TargetCity.ToString() == window.CityName)
-                        window.vehiclesCityListBox.Items.Add(vehicle.ViewInfo());
+                    window.vehiclesCityListBox.Items.Add(vehicle.BoxInfo());
                 }
+
                 return;
             }
+
             window.clientsCityListBox.Visible = false;
             window.vehiclesCityListBox.Location = window.clientsCityListBox.Location;
             var vehicles = _manager.Vehicles;
             foreach (var vehicle in vehicles)
             {
-                window.vehiclesCityListBox.Items.Add(vehicle.ViewInfo());
+                window.vehiclesCityListBox.Items.Add(vehicle.BoxInfo());
             }
         }
 
         private void SpbLabel_Click(object sender, EventArgs e)
         {
-            var window = new CityVisual();
-            window.CityName = "Saint Petersburg";
-            window.cityLabel.Text += window.CityName;
-            AddElementsToView(window);
-            window.Show();
+            ShowCity("Saint Petersburg");
         }
 
         private void KznLabel_Click(object sender, EventArgs e)
         {
-            var window = new CityVisual();
-            window.CityName = "Kazan";
-            window.cityLabel.Text += window.CityName;
-            AddElementsToView(window);
-            window.Show();
+            ShowCity("Kazan");
         }
 
         private void SmrLabel_Click(object sender, EventArgs e)
         {
-            var window = new CityVisual();
-            window.CityName = "Samara";
-            window.cityLabel.Text += window.CityName;
-            AddElementsToView(window);
-            window.Show();
+            ShowCity("Samara");
         }
 
         private void VlgLabel_Click(object sender, EventArgs e)
         {
-            var window = new CityVisual();
-            window.CityName = "Volgograd";
-            window.cityLabel.Text += window.CityName;
-            AddElementsToView(window);
-            window.Show();
+            ShowCity("Volgograd");
         }
 
         private void MskLabel_Click(object sender, EventArgs e)
         {
-            var window = new CityVisual();
-            window.CityName = "Moscow";
-            window.cityLabel.Text = "Current base";
-            AddElementsToView(window);
-            window.Show();
+            ShowCity("Moscow");
         }
     }
 }

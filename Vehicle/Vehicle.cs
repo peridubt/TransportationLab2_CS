@@ -1,41 +1,22 @@
 ﻿namespace TransportationLab2.Vehicle;
 
-public class Vehicle
+public class Vehicle(string carBrand, int id)
 {
-    private readonly string _carBrand;
-    private readonly int _id;
-
     public Client.Client? Client { get; set; }
-
-    public string CarBrand
-    {
-        get => _carBrand;
-    }
-
-    public int Id
-    {
-        get => _id;
-    }
 
     public City.City? TargetCity { get; set; } = new();
     public VehicleState State { get; set; } = VehicleState.Waiting;
-    public PictureBox VehicleAvatar = new();
+    public PictureBox VehicleAvatar = new(); // Картинка для грузовика
     public Point CurrentPos { get; set; }
 
 
-    public Vehicle(string carBrand, int id)
+    public string ViewInfo() // Используется для отображения информации в ListView
     {
-        _carBrand = carBrand;
-        _id = id;
+        return carBrand + " (" + id + ")";
     }
 
-    public override string ToString()
+    public string BoxInfo() // Используется для отображения ифномрации в отдельном окне (В ListBox)
     {
-        return _carBrand + " (" + _id + ")";
-    }
-
-    public string ViewInfo()
-    {
-        return _carBrand + " (" + _id + ") [" + State + "]";
+        return carBrand + " (" + id + ") [" + State + "]";
     }
 }
