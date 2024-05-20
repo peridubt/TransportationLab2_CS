@@ -46,6 +46,7 @@ namespace TransportationLab2
             messagesTextBox = new TextBox();
             messageLogLabel = new Label();
             startButton = new Button();
+            stopButton = new Button();
             ((System.ComponentModel.ISupportInitialize)spbPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)kznPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)smrPictureBox).BeginInit();
@@ -59,7 +60,7 @@ namespace TransportationLab2
             spbPictureBox.BackgroundImageLayout = ImageLayout.None;
             spbPictureBox.Image = (Image)resources.GetObject("spbPictureBox.Image");
             spbPictureBox.Location = new Point(360, 163);
-            spbPictureBox.Name = "spbPictureBox";
+            spbPictureBox.Name = "spb";
             spbPictureBox.Size = new Size(39, 62);
             spbPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
             spbPictureBox.TabIndex = 9;
@@ -71,7 +72,7 @@ namespace TransportationLab2
             kznPictureBox.BackgroundImageLayout = ImageLayout.None;
             kznPictureBox.Image = (Image)resources.GetObject("kznPictureBox.Image");
             kznPictureBox.Location = new Point(929, 408);
-            kznPictureBox.Name = "kznPictureBox";
+            kznPictureBox.Name = "kzn";
             kznPictureBox.Size = new Size(39, 62);
             kznPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
             kznPictureBox.TabIndex = 10;
@@ -83,7 +84,7 @@ namespace TransportationLab2
             smrPictureBox.BackgroundImageLayout = ImageLayout.None;
             smrPictureBox.Image = (Image)resources.GetObject("smrPictureBox.Image");
             smrPictureBox.Location = new Point(988, 551);
-            smrPictureBox.Name = "smrPictureBox";
+            smrPictureBox.Name = "smr";
             smrPictureBox.Size = new Size(39, 62);
             smrPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
             smrPictureBox.TabIndex = 11;
@@ -95,7 +96,7 @@ namespace TransportationLab2
             vlgPictureBox.BackgroundImageLayout = ImageLayout.None;
             vlgPictureBox.Image = (Image)resources.GetObject("vlgPictureBox.Image");
             vlgPictureBox.Location = new Point(811, 837);
-            vlgPictureBox.Name = "vlgPictureBox";
+            vlgPictureBox.Name = "vlg";
             vlgPictureBox.Size = new Size(39, 62);
             vlgPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
             vlgPictureBox.TabIndex = 12;
@@ -107,7 +108,7 @@ namespace TransportationLab2
             mskPictureBox.BackgroundImageLayout = ImageLayout.None;
             mskPictureBox.Image = (Image)resources.GetObject("mskPictureBox.Image");
             mskPictureBox.Location = new Point(544, 426);
-            mskPictureBox.Name = "mskPictureBox";
+            mskPictureBox.Name = "msk";
             mskPictureBox.Size = new Size(39, 62);
             mskPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
             mskPictureBox.TabIndex = 13;
@@ -116,7 +117,7 @@ namespace TransportationLab2
             // viewWarehouseButton
             // 
             viewWarehouseButton.Font = new Font("Segoe UI", 13.8F);
-            viewWarehouseButton.Location = new Point(3, 242);
+            viewWarehouseButton.Location = new Point(3, 327);
             viewWarehouseButton.Name = "viewWarehouseButton";
             viewWarehouseButton.Size = new Size(269, 78);
             viewWarehouseButton.TabIndex = 14;
@@ -192,7 +193,7 @@ namespace TransportationLab2
             messagesTextBox.Name = "messagesTextBox";
             messagesTextBox.ReadOnly = true;
             messagesTextBox.ScrollBars = ScrollBars.Vertical;
-            messagesTextBox.Size = new Size(1067, 101);
+            messagesTextBox.Size = new Size(1077, 101);
             messagesTextBox.TabIndex = 23;
             // 
             // messageLogLabel
@@ -217,6 +218,17 @@ namespace TransportationLab2
             startButton.UseVisualStyleBackColor = true;
             startButton.Click += startButton_Click;
             // 
+            // stopButton
+            // 
+            stopButton.Font = new Font("Segoe UI", 13.8F);
+            stopButton.Location = new Point(3, 242);
+            stopButton.Name = "stopButton";
+            stopButton.Size = new Size(269, 78);
+            stopButton.TabIndex = 26;
+            stopButton.Text = "Stop";
+            stopButton.UseVisualStyleBackColor = true;
+            stopButton.Click += stopButton_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(11F, 28F);
@@ -224,6 +236,7 @@ namespace TransportationLab2
             BackColor = SystemColors.ControlLightLight;
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             ClientSize = new Size(1082, 911);
+            Controls.Add(stopButton);
             Controls.Add(startButton);
             Controls.Add(messageLogLabel);
             Controls.Add(messagesTextBox);
@@ -268,5 +281,6 @@ namespace TransportationLab2
         private TextBox messagesTextBox;
         private Label messageLogLabel;
         private Button startButton;
+        private Button stopButton;
     }
 }

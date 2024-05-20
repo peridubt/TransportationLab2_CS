@@ -7,6 +7,7 @@ namespace TransportationLab2
     {
         private Manager _manager;
         private List<PictureBox> _vehiclePBox;
+        private Dictionary<string, PictureBox> _citiesPBox;
 
         public MainForm()
         {
@@ -30,8 +31,16 @@ namespace TransportationLab2
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            _vehiclePBox = new();
-            _manager = new(ref _vehiclePBox, ref messagesTextBox);
+            _vehiclePBox = [];
+            _citiesPBox = new Dictionary<string, PictureBox>()
+            {
+                [vlgPictureBox.Name] = vlgPictureBox,
+                [kznPictureBox.Name] = kznPictureBox,
+                [mskPictureBox.Name] = mskPictureBox,
+                [spbPictureBox.Name] = spbPictureBox,
+                [smrPictureBox.Name] = smrPictureBox,
+            };
+            _manager = new(ref _vehiclePBox, ref messagesTextBox, ref _citiesPBox);
             for (int i = 0; i < 5; ++i)
                 Controls.Add(_vehiclePBox[i]);
             CenterToScreen();
@@ -104,6 +113,18 @@ namespace TransportationLab2
             try
             {
                 _manager.Start();
+            }
+            catch (ManagerException ex)
+            {
+                ShowError(ex);
+            }
+        }
+
+        private void stopButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                _manager.Stop();
             }
             catch (ManagerException ex)
             {

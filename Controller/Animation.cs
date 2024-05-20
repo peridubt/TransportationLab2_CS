@@ -4,7 +4,7 @@ public static class Animation
 {
     public static List<PictureBox> VehicleAvatars { get; set; } = [];
     public static TextBox MessageHandler { get; set; } = new();
-    
+    public static Dictionary<string, PictureBox> CityAvatars { get; set; } = [];
     
     
     // Метод, который создаёт список точек, по которым грузовик начнёт своё движение 

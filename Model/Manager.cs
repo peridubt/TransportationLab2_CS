@@ -19,6 +19,7 @@ public class Manager
     private readonly List<Thread> _threads = []; // Потоки, которые выполняют логику работы машин
     private readonly object _lock = new(); // Объект для синхронизации потоков (для lock() )
     private readonly Queue<Vehicle.Vehicle> _activeVehicles = new(); // очередь грузовиков, находящихся в пути
+    private readonly Timer _timer = new();
     private bool _started = false;
 
     private event Action? NotifyClient; // Event, на который подписывается клиент. (Вот и шаблон "Наблюдатель")
@@ -77,11 +78,13 @@ public class Manager
         truck.Client.State = ClientState.WaitingForOrder; // Состояние клиента - ожидание
         lock (_lock)
         {
-            Animation.MessageHandler.Text += $"Truck {truck.ToString()} is driving to {truck.TargetCity.Name}; " +
-                                             $"Client: {client.ToString()}, Order: {client.Order.ToString()}\r\n";
+            Animation.MessageHandler.AppendText($"Truck {truck.ToString()} is driving to {truck.TargetCity.Name}; " +
+                                                $"Client: {client.ToString()}, Order: {client.Order.ToString()}\r\n");
         }
-        Animation.Move(truck.TargetCity.Coordinates, ref truck, false); // Вызывается метод, который перемещает
+
+        // Вызывается метод, который перемещает
         // PictureBox грузовика из начальной точки в указанную
+        Animation.Move(truck.TargetCity.Coordinates, ref truck, false);
     }
 
     // Выгрузка товара
@@ -92,8 +95,8 @@ public class Manager
         truck.Client.State = ClientState.RecievingOrder;
         lock (_lock)
         {
-            Animation.MessageHandler.Text += $"{client.ToString()} is receiving their order "
-                                             + $"in {client.City?.Name}\r\n";
+            Animation.MessageHandler.AppendText($"{client.ToString()} is receiving their order "
+                                                + $"in {client.City?.Name}\r\n");
         }
 
         // Ставим время для выгрузки - 5 с
@@ -112,9 +115,10 @@ public class Manager
     {
         lock (_lock)
         {
-            Animation.MessageHandler.Text += $"{truck.ToString()} is driving "
-                                             + $"back to Moscow\r\n";
+            Animation.MessageHandler.AppendText($"{truck.ToString()} is driving "
+                                                + $"back to Moscow\r\n");
         }
+
         truck.State = VehicleState.Driving;
         Animation.Move(prevPoint, ref truck, true);
         truck.State = VehicleState.Waiting;
@@ -148,7 +152,8 @@ public class Manager
         }
     }
 
-    public Manager(ref List<PictureBox> vehiclePBox, ref TextBox messagesTextBox)
+    public Manager(ref List<PictureBox> vehiclePBox, ref TextBox messagesTextBox,
+        ref Dictionary<string, PictureBox> cityPBox)
     {
         // В начале менеджеру назначаем отображение клиентов и грузовиков
 
@@ -156,10 +161,10 @@ public class Manager
         _cities =
             new List<City.City?>
             {
-                new("Volgograd", 1065, new(811, 837)),
-                new("Saint Petersburg", 635, new(360, 163)),
-                new("Kazan", 819, new(929, 408)),
-                new("Samara", 968, new(998, 551))
+                new("Volgograd", 1065, cityPBox["vlg"].Location),
+                new("Saint Petersburg", 635, cityPBox["spb"].Location),
+                new("Kazan", 819, cityPBox["kzn"].Location),
+                new("Samara", 968, cityPBox["smr"].Location)
             };
 
         // Наполняем склад
@@ -173,20 +178,34 @@ public class Manager
                 CreateVehicle();
             }
         }
-
         vehiclePBox = Animation.VehicleAvatars;
         Animation.MessageHandler = messagesTextBox;
     }
 
     public void Start()
     {
-        if (_started)
-            throw new ManagerException("The process has already started!");
-        var timer = new Timer();
-        timer.Interval = 5000;
-        timer.Tick += CreateOrder;
-        _started = true;
-        timer.Start();
+        lock (_lock)
+        {
+            if (_started)
+                throw new ManagerException("The process has already started!");
+            Animation.MessageHandler.AppendText($"[STARTING IN 5 SECS...]\r\n");
+            _started = true;
+            _timer.Interval = 5000;
+            _timer.Tick += CreateOrder;
+            _timer.Start();
+        }
+    }
+
+    public void Stop()
+    {
+        lock (_lock)
+        {
+            if (!_started)
+                throw new ManagerException("The process has already stopped!");
+            Animation.MessageHandler.AppendText($"[WAITING FOR REMAINING ORDERS TO BE COMPLETE...]\r\n");
+            _started = false;
+            _timer.Stop();
+        }
     }
 
     // Метод наполнения склада различными грузами
@@ -279,6 +298,7 @@ public class Manager
                 result.AppendLine($"{item.Id,-4}\"{item.Name,-20}\"" +
                                   $"{item.Type.ToString(),-20}{item.Cost,-5}");
             }
+
             return result.ToString();
         }
     }
