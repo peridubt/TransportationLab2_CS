@@ -61,7 +61,7 @@ public class Manager
         NotifyClient += client.RecieveOrder; // Клиент подписывается на событие, которое 
         truck.State = VehicleState.Driving; // Состояние грузовика меняется на "В пути"
         truck.Client.State = ClientState.WaitingForOrder; // Состояние клиента - ожидание
-        Animation.Move(truck.TargetCity.Coordinates, ref truck); // Вызывается метод, который перемещает
+        Animation.Move(truck.TargetCity.Coordinates, ref truck, false); // Вызывается метод, который перемещает
         // PictureBox грузовика из начальной точки в указанную
     }
 
@@ -86,7 +86,7 @@ public class Manager
     private void DriveBack(Point prevPoint, Vehicle.Vehicle truck)
     {
         truck.State = VehicleState.Driving;
-        Animation.Move(prevPoint, ref truck);
+        Animation.Move(prevPoint, ref truck, true);
         truck.State = VehicleState.Waiting;
         truck.VehicleAvatar.Visible = false;
     }
