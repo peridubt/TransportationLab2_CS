@@ -187,7 +187,7 @@ public class Manager
         lock (_lock)
         {
             if (_started)
-                throw new ManagerException("The process has already started!");
+                throw new ManagerException("The process is already running!");
             Animation.MessageHandler.AppendText($"[STARTING IN 5 SECS...]\r\n");
             _started = true;
             _timer.Interval = 5000;
@@ -201,7 +201,7 @@ public class Manager
         lock (_lock)
         {
             if (!_started)
-                throw new ManagerException("The process has already stopped!");
+                throw new ManagerException("The process has already been stopped!");
             Animation.MessageHandler.AppendText($"[WAITING FOR REMAINING ORDERS TO BE COMPLETE...]\r\n");
             _started = false;
             _timer.Stop();
