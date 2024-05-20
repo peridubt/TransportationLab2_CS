@@ -21,6 +21,11 @@ public class Client(
 
     public override string ToString()
     {
+        return Name + " " + Surname;
+    }
+
+    public string BoxInfo()
+    {
         return Name + " " + Surname + " [" + State.ToString() + "]";
     }
 }
