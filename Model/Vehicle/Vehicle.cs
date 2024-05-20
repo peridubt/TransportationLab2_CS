@@ -6,17 +6,19 @@ public class Vehicle(string carBrand, int id)
 
     public City.City? TargetCity { get; set; } = new();
     public VehicleState State { get; set; } = VehicleState.Waiting;
-    public PictureBox VehicleAvatar = new(); // Картинка для грузовика
     public Point CurrentPos { get; set; }
-
-
-    public string ViewInfo() // Используется для отображения информации в ListView
+    
+    public int Id
     {
-        return carBrand + " (" + id + ")";
+        get => id;
     }
 
     public string BoxInfo() // Используется для отображения ифномрации в отдельном окне (В ListBox)
     {
         return carBrand + " (" + id + ") [" + State + "]";
+    }
+    public override string ToString()
+    {
+        return carBrand + " (" + id + ")";
     }
 }

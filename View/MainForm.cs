@@ -1,10 +1,12 @@
 using TransportationLab2.Controller;
+using TransportationLab2.Model;
 
 namespace TransportationLab2
 {
     public partial class MainForm : Form
     {
         private Manager _manager;
+        private List<PictureBox> _vehiclePBox;
 
         public MainForm()
         {
@@ -26,49 +28,13 @@ namespace TransportationLab2
             window.Show();
         }
 
-        public void MainForm_Load(object sender, EventArgs e)
+        private void MainForm_Load(object sender, EventArgs e)
         {
-            _manager = new(ref clientsView, ref vehiclesView);
+            _vehiclePBox = new();
+            _manager = new(ref _vehiclePBox, ref messagesTextBox);
+            for (int i = 0; i < 5; ++i)
+                Controls.Add(_vehiclePBox[i]);
             CenterToScreen();
-        }
-
-        private void AddVehicleButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                PictureBox vehiclePBox = new();
-                _manager.CreateVehicle(ref vehiclePBox);
-                Controls.Add(vehiclePBox);
-                vehiclePBox.BringToFront();
-            }
-            catch (ManagerException ex)
-            {
-                ShowError(ex);
-            }
-        }
-
-        private void AddClientButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                _manager.CreateClient();
-            }
-            catch (ManagerException ex)
-            {
-                ShowError(ex);
-            }
-        }
-
-        private void CreateOrderButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                _manager.CreateOrder();
-            }
-            catch (ManagerException ex)
-            {
-                ShowError(ex);
-            }
         }
 
         private void ViewWarehouseButton_Click(object sender, EventArgs e)
@@ -76,11 +42,6 @@ namespace TransportationLab2
             var warehouseWindow = new WarehouseVisual();
             warehouseWindow.warehouseTextBox.Text = _manager.ViewWarehouse();
             warehouseWindow.Show();
-        }
-
-        private void RestockWarehouseButton_Click(object sender, EventArgs e)
-        {
-            _manager.RestockWarehouse();
         }
 
         private void AddElementsToView(CityVisual window)
@@ -91,7 +52,7 @@ namespace TransportationLab2
                 foreach (var client in clients.Where(client =>
                              client.City.ToString() == window.CityName))
                 {
-                    window.clientsCityListBox.Items.Add(client.ToString());
+                    window.clientsCityListBox.Items.Add(client.BoxInfo());
                 }
 
                 var activeVehicles = _manager.ActiveVehicles;
@@ -136,6 +97,18 @@ namespace TransportationLab2
         private void MskLabel_Click(object sender, EventArgs e)
         {
             ShowCity("Moscow");
+        }
+
+        private void startButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                _manager.Start();
+            }
+            catch (ManagerException ex)
+            {
+                ShowError(ex);
+            }
         }
     }
 }
