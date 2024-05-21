@@ -67,8 +67,6 @@ public class Manager
         if (truck.Client != null) truck.Client.State = ClientState.WaitingForOrder; // Состояние клиента - ожидание
         lock (_lock)
         {
-            Debug.Assert(truck.TargetCity != null, "truck.TargetCity != null");
-            Debug.Assert(client.Order != null, "client.Order != null");
             Animation.MessageHandler.AppendText($"Truck {truck} is driving to {truck.TargetCity.Name}; " +
                                                 $"Client: {client}, Order: {client.Order}\r\n");
         }
