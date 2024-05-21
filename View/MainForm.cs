@@ -1,12 +1,35 @@
 using TransportationLab2.Controller;
 using TransportationLab2.Model;
 
-namespace TransportationLab2
+#region Логика работы моей программы
+/*
+Автоматичекски добавляются (рандомные) грузовики: максимально — 5 шт.
+Автоматически добавляются (рандомные) клиенты : максимально — 10 шт.
+В форме есть конпка "Старт", которая запускает процесс выдачи заказов
+незанятым грузовикам (происходит каждые 5 секунд).
+Один грузовик может иметь один заказ. Кнопка "Стоп" приостанавливает процесс выдачи заказов,
+но сами заказы не отменяет.
+У каждого грузовика есть клиент, которому надо доставить груз. Сам клиент он подписывается на event,
+который в будущем уведомит его о доставке и запустит (через Invoke) процесс передачи заказа.
+После доставки клиент отписывается от данного event.
+Один поток — это один грузовик. Сам поток запускает бесконечный цикл,
+где грузовик запрашивает каждые 100 мс, не поступил ли ему новый заказ.
+При положительном результате он сразу начинает своё движение.
+
+Из MVC у меня:
+Model — класс Manager + классы различных сущностей;
+Controller — класс Animation;
+View — классы различных винформ.
+Из фабрики: фабрика грузов различных типов (я решил сделать 4 груза).
+Наблюдатель: события, которые уведомляют клиентов.
+ */
+#endregion
+
+namespace TransportationLab2.View
 {
     public partial class MainForm : Form
     {
         private Manager _manager;
-        private List<PictureBox> _vehiclePBox;
         private Dictionary<string, PictureBox> _citiesPBox;
 
         public MainForm()
@@ -14,9 +37,9 @@ namespace TransportationLab2
             InitializeComponent();
         }
 
-        private void ShowError(ManagerException ex)
+        private static void ShowError(ManagerException ex)
         {
-            MessageBox.Show(ex.Message, "Error!",
+            MessageBox.Show(ex.Message, @"Error!",
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
@@ -29,10 +52,10 @@ namespace TransportationLab2
             window.Show();
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
+        private void MainForm_Load(object sender, EventArgs e) // Инициализация нужных полей
         {
-            _vehiclePBox = [];
-            _citiesPBox = new Dictionary<string, PictureBox>()
+            _citiesPBox = new Dictionary<string, PictureBox> // Словарь городов, где ключ - это имя города, 
+                // а значение - PictureBox (используется для определения координат картинки на винформе)
             {
                 [vlgPictureBox.Name] = vlgPictureBox,
                 [kznPictureBox.Name] = kznPictureBox,
@@ -40,9 +63,12 @@ namespace TransportationLab2
                 [spbPictureBox.Name] = spbPictureBox,
                 [smrPictureBox.Name] = smrPictureBox,
             };
-            _manager = new(ref _vehiclePBox, ref messagesTextBox, ref _citiesPBox);
-            for (int i = 0; i < 5; ++i)
-                Controls.Add(_vehiclePBox[i]);
+            Animation.MessageHandler = messagesTextBox; // Передаём контролу TextBox из формы
+            Animation.CitiesAvatars = _citiesPBox; // Передаём контролу словарь городов
+            _manager = new Manager();
+            for (var i = 0; i < 5; ++i)
+                Controls.Add(Animation.VehicleAvatars[i]); // После создания
+            
             CenterToScreen();
         }
 
@@ -59,14 +85,14 @@ namespace TransportationLab2
             {
                 var clients = _manager.Clients;
                 foreach (var client in clients.Where(client =>
-                             client.City.ToString() == window.CityName))
+                             client.City?.ToString() == window.CityName))
                 {
                     window.clientsCityListBox.Items.Add(client.BoxInfo());
                 }
 
                 var activeVehicles = _manager.ActiveVehicles;
                 foreach (var vehicle in activeVehicles.Where(vehicle =>
-                             vehicle.TargetCity.ToString() == window.CityName))
+                             vehicle.TargetCity?.ToString() == window.CityName))
                 {
                     window.vehiclesCityListBox.Items.Add(vehicle.BoxInfo());
                 }

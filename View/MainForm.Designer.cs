@@ -1,6 +1,4 @@
-﻿using System.Windows.Forms;
-
-namespace TransportationLab2
+﻿namespace TransportationLab2.View
 {
     partial class MainForm
     {

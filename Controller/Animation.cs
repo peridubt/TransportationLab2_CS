@@ -4,6 +4,8 @@ public static class Animation
 {
     public static List<PictureBox> VehicleAvatars { get; set; } = [];
     public static TextBox MessageHandler { get; set; } = new();
+
+    public static Dictionary<string, PictureBox> CitiesAvatars { get; set; } = [];
     
     
     // Метод, который создаёт список точек, по которым грузовик начнёт своё движение 
@@ -29,14 +31,13 @@ public static class Animation
     }
 
     // Метод создания картинки для грузовика
-    public static void CreateVehicleImage(ref Vehicle.Vehicle vehicle)
+    public static void CreateVehicleImage()
     {
         var vehicleAvatar = new PictureBox();
         string imageDirectory ="..\\..\\..\\View\\Resources\\truck.png"; 
         vehicleAvatar.Image = Image.FromFile(imageDirectory); // Находим файл (по относительной ссылке)
         vehicleAvatar.Visible = false; // На начальный момент грузовик не виден пользователю
         vehicleAvatar.Location = new Point(544, 426); // Точка старта (координаты Москвы на моей карте)
-        vehicle.CurrentPos = vehicleAvatar.Location; // Ставим на это место картинку
         vehicleAvatar.Size = new Size(100, 50); 
         vehicleAvatar.SizeMode = PictureBoxSizeMode.StretchImage; // Подгоняем изображение под заданные размеры
         vehicleAvatar.Image.RotateFlip(RotateFlipType.RotateNoneFlipX);
